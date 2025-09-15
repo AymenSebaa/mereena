@@ -1,0 +1,41 @@
+{
+    "id": "/",
+    "name": "Intra-African Trade Fair",
+    "short_name": "IATF",
+    "description": "IATF2025 is the ultimate marketplace for African businesses, investors, and entrepreneurs. With access to over 1.4 billion people and a GDP exceeding $3.5 ...",
+    "start_url": "/",
+    "background_color": "#e70147",
+    "theme_color": "#e70147",
+    "display": "standalone",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "icons/logo-144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "icons/logo-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icons/logo-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "screenshots/iatf-md.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+         {
+            "src": "screenshots/iatf-lg.png",
+            "sizes": "3584x2240",
+            "type": "image/png"
+        }
+    ]
+}
