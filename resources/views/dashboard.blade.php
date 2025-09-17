@@ -6,11 +6,6 @@
 @endphp
 @section('content')
     <div class="mobile-padding">
-        @if (in_array($profile->role_id, [10]))
-            <div class="text-center mb-4 d-flex justify-content-center">
-                <img src="{{ asset('icons/iatf.jpg') }}" alt="IATF Logo" class="img-fluid w-100">
-            </div>
-        @endif
 
         <!-- Stats Cards -->
         @if (!in_array($profile->role_id, [10]))

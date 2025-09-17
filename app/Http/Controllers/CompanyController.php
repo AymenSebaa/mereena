@@ -11,7 +11,7 @@ class CompanyController extends Controller {
     // List all companies
     public function index() {
         $data['companies'] = Company::with('buses')->get();
-        $data['types'] = Type::where('name', 'Vehicules')->first()->subTypes;
+        $data['types'] = Type::where('name', 'Vehicules')->first()?->subTypes ?? [];
 
         return view('companies.index', $data);
     }

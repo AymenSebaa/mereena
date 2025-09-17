@@ -10,7 +10,6 @@ use App\Http\Controllers\BusController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ComplaintController;
-use App\Http\Controllers\FlightController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PushController;
@@ -20,18 +19,14 @@ use App\Http\Controllers\ScanController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatisticController;
-use App\Http\Controllers\SystemController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\EnsureOtpVerified;
-use App\Mail\FlightUpdateMail;
-use App\Models\User;
-use App\Services\GoogleMapsService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
+
 
 Route::get('/', function () {
     if (Auth::check()) return redirect()->route('dashboard');
@@ -39,16 +34,18 @@ Route::get('/', function () {
 });
 
 // OTP routes (only require auth)
+/*
 Route::middleware(['auth'])->prefix('otp')->group(function () {
     Route::get('/verify', [OtpController::class, 'showVerifyForm'])->name('otp.verify');
     Route::post('/verify', [OtpController::class, 'verify'])->name('otp.verify.submit')->middleware('throttle:10,10');
     Route::post('/resend', [OtpController::class, 'resend'])->name('otp.resend')->middleware('throttle:10,10');
     Route::get('/remaining', [OtpController::class, 'remaining'])->name('otp.remaining');
 });
+*/
 
 // Protected routes (require auth + OTP verification)
 // Route::middleware(['auth' /*, 'otp.verified'*/ ])->group(function () {
-Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
+Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -99,10 +96,6 @@ Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
     Route::middleware([CheckPermission::class . ':guests'])->prefix('guests')->group(function () {
         Route::get('/', [GuestController::class, 'index'])->name('guests.index');
         Route::get('/live', [GuestController::class, 'live'])->name('guests.live');
-    });
-
-    Route::middleware([CheckPermission::class . ':flights'])->prefix('flights')->group(function () {
-        Route::get('/', [FlightController::class, 'index'])->name('flights.index');
     });
 
     Route::middleware([CheckPermission::class . ':reservations'])->prefix('reservations')->group(function () {
@@ -176,7 +169,7 @@ Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
     });
 
 
-    /*
+    
     Route::get('/dump-autoload', function () {
         Artisan::call('optimize:clear');
         Artisan::call('config:clear');
@@ -184,89 +177,13 @@ Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
         Artisan::call('view:clear');
         return 'Autoload refreshed';
     });
-    */
+    
 
-    /*
-    Route::get('/test-directions', function () {
-        $source = ['lat' => 36.7538, 'lng' => 3.0588];
-        $destination = ['lat' => 36.4803, 'lng' => 2.8000];
-        $key = env('GOOGLE_MAPS_KEY');
-
-        $url = "https://maps.googleapis.com/maps/api/directions/json"
-            . "?origin={$source['lat']},{$source['lng']}"
-            . "&destination={$destination['lat']},{$destination['lng']}"
-            . "&mode=driving"
-            . "&key={$key}";
-
-        $response = Http::get($url);
-
-        return response()->json([
-            'status' => true,
-            'source' => $source,
-            'destination' => $destination,
-            'url' => $url,      // 👈 copy this and test in Postman
-            'directions' => $response->json(),
-        ]);
-    });
-    */
-
-    Route::get('/flights-update', function () {
-        $recipients = User::
-            //where('email', 'boutika.dzd@gmail.com')->
-            whereHas('profile', fn($q) => $q->whereIn('role_id', [10]))->get();
-        // dd($recipients);
-
-        foreach ($recipients as $user) {
-            Mail::to($user->email)->queue(new FlightUpdateMail());
-        }
-
-        // return view('emails.flights_update');
-        return view('emails.book_flights');
-    });
 });
 
 
-Route::prefix('system')->group(function () {
-    Route::get('/fetch-all', [SystemController::class, 'fetchAll']);
-    Route::get('/run-queue', [SystemController::class, 'runQueue']);
+Route::prefix('cron')->group(function () {
+    Route::get('/run-queue', [CronController::class, 'runQueue']);
 });
 
 require __DIR__ . '/auth.php';
-
-Route::prefix('flights')->group(function () {
-    Route::get('/book', [FlightController::class, 'book'])->name('flights.book');
-    Route::post('/reserve', [ReservationController::class, 'reserve'])->name('flights.reserve');
-});
-
-/*
-Route::get('/timeout', function () {
-    $url = env('DJAZ_BASE_URL') . '/get_tasks';
-    $params = ['user_api_hash' => env('DJAZFLEET_API_HASH')];
-
-    try {
-        $response = Http::withOptions([
-            'verify' => false,
-        ])->timeout(30)->get($url, $params);
-
-        return $response->body();
-    } catch (\Exception $e) {
-        return $e->getMessage();
-    }
-});
-
-Route::get('/timeout-test', function () {
-    $url = env('DJAZ_BASE_URL') . '/get_tasks?user_api_hash=' . urlencode(env('DJAZFLEET_API_HASH'));
-
-    try {
-        $context = stream_context_create([
-            'http' => ['timeout' => 60],
-            'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false],
-        ]);
-
-        $result = file_get_contents($url, false, $context);
-        return $result ?: 'Failed with file_get_contents';
-    } catch (\Exception $e) {
-        return $e->getMessage();
-    }
-});
-*/

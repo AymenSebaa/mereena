@@ -27,11 +27,8 @@ class RegisteredUserController extends Controller {
      * Display the registration view.
      */
     public function create(): View {
-        $countries = Country::orderBy('name_en')->get();
-        $hotels = Hotel::orderBy('name')->get();
-        $categories = Type::where('name', 'Guest categories')->first()->subTypes;
-
-        return view('auth.register', compact(['countries', 'hotels', 'categories']));
+        $data = [];
+        return view('auth.register', $data);
     }
 
     /**
@@ -43,11 +40,8 @@ class RegisteredUserController extends Controller {
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'max:255'],
             'role_id'  => ['nullable', 'exists:roles,id'],
-            'country_id' => ['required', 'exists:countries,id'],
-            'hotel_id'   => ['required', 'exists:hotels,id'],
-            'category'   => ['required', 'string', 'max:255'],
-            'other_category' => ['required_if:category,Other', 'nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20', 'unique:profiles,phone'],
         ]);
 

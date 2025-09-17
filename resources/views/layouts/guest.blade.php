@@ -163,9 +163,6 @@
         }
 
         .backdrop {
-            background-image: url('{{ asset('icons/iatf.jpg') }}');
-            background-size: contain;
-            background-position: center;
             position: fixed;
             top: -50%;
             left: -50%;

@@ -64,7 +64,7 @@ class LoginRequest extends FormRequest {
 
         $remember = $this->boolean('remember');
         Auth::login($user, $remember);
-        OtpController::generateAndSendOTP($user);
+        // OtpController::generateAndSendOTP($user);
 
         RateLimiter::clear($this->throttleKey());
     }

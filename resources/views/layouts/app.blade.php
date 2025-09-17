@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('page_title', 'IATF')</title>
+    <title>@yield('page_title', 'Mereena')</title>
     <link rel="icon" href="{{ asset('icons/logo-round.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

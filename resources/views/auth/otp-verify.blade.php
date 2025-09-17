@@ -1,6 +1,5 @@
 <x-guest-layout>
     <div class="w-100" style="max-width:420px;margin:auto;text-align:center;">
-        <img src="{{ asset('icons/iatf.jpg') }}" alt="IATF Logo" class="img-fluid mb-4">
         <h2 class="fw-bold mb-3">OTP Verification</h2>
         <p>Enter the 6-digit code sent to <strong>{{ auth()->user()->email }}</strong></p>
         <p class="small mb-4"> <span id="otp-timer">--:--</span></p>

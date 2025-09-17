@@ -13,14 +13,6 @@
             'badge' => null,
         ],
         [
-            'key' => 'flights',
-            'route' => 'flights.index',
-            'pattern' => 'flights.*',
-            'icon' => 'bi bi-airplane',
-            'text' => 'Flights',
-            'badge' => 'flight_count',
-        ],
-        [
             'key' => 'reservations',
             'route' => 'reservations.index',
             'pattern' => 'reservations.*',
@@ -150,6 +142,9 @@
             ],
         ],
     ];
+
+    $modules = App\Services\ModuleManager::all();
+    // dd($modules);
 @endphp
 
 <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
@@ -177,6 +172,9 @@
     </div>
 
     <nav class="nav-items flex-grow-1 py-3 ">
+        
+
+
         @foreach ($sidebarItems as $item)
             @if (in_array($item['key'], $permissions))
                 <div class="nav-item">

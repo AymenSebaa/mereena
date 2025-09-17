@@ -1,6 +1,6 @@
-const url = 'https://bus.iatf-dz.com/';
+const url = 'https://ai-trolley.com/mereena/';
 
-const app = "iatf";
+const app = "mereena";
 const assets = [
     `${url}/`,
     `${url}/index.php`,
