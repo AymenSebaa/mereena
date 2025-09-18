@@ -4,82 +4,70 @@ namespace Modules\Stock\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Product\Entities\Supplier;
+use Modules\Stock\Models\Supplier;
 
 class SupplierController extends Controller {
     /**
      * Display a listing of suppliers.
      */
     public function index(Request $request) {
-        $suppliers = Supplier::query()
-            ->when(
-                $request->search,
-                fn($q, $search) =>
+        $query = Supplier::query();
+
+        if ($search = $request->get('q')) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
                     ->orWhere('email', 'like', "%$search%")
-                    ->orWhere('phone', 'like', "%$search%")
-            )
-            ->paginate(20);
+                    ->orWhere('phone', 'like', "%$search%");
+            });
+        }
 
-        return response()->json($suppliers);
+        $suppliers = $query->latest()->get();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'result' => true,
+                'data'   => $suppliers,
+            ]);
+        }
+
+        return view('stock::suppliers.index', compact('suppliers'));
     }
 
     /**
-     * Store a newly created supplier.
+     * Store or update a supplier.
      */
-    public function store(Request $request) {
-        $data = $request->validate([
-            'company_id'   => 'required|exists:companies,id',
-            'name'         => 'required|string|max:255',
-            'email'        => 'nullable|email',
-            'phone'        => 'nullable|string|max:50',
-            'address'      => 'nullable|string|max:255',
-            'contact_name' => 'nullable|string|max:255',
+    public function upsert(Request $request, $id = null) {
+        $validated = $request->validate([
+            'name'    => 'required|string|max:255',
+            'contact' => 'nullable|string|max:255',
+            'email'   => 'nullable|email|max:255',
+            'phone'   => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:500',
         ]);
 
-        $supplier = Supplier::create($data);
+        $supplier = Supplier::updateOrCreate(
+            ['id' => $request->input('id') ?? $id],
+            $validated
+        );
 
         return response()->json([
-            'message'  => 'Supplier created successfully',
-            'supplier' => $supplier
-        ], 201);
-    }
-
-    /**
-     * Show a supplier.
-     */
-    public function show(Supplier $supplier) {
-        return response()->json($supplier->load('stocks'));
-    }
-
-    /**
-     * Update a supplier.
-     */
-    public function update(Request $request, Supplier $supplier) {
-        $data = $request->validate([
-            'name'         => 'sometimes|required|string|max:255',
-            'email'        => 'nullable|email',
-            'phone'        => 'nullable|string|max:50',
-            'address'      => 'nullable|string|max:255',
-            'contact_name' => 'nullable|string|max:255',
-        ]);
-
-        $supplier->update($data);
-
-        return response()->json([
-            'message'  => 'Supplier updated successfully',
-            'supplier' => $supplier
+            'result'  => true,
+            'message' => $request->input('id') ? 'Supplier updated successfully' : 'Supplier created successfully',
+            'data'    => $supplier,
         ]);
     }
 
     /**
-     * Delete a supplier.
+     * Remove the specified supplier.
      */
-    public function destroy(Supplier $supplier) {
-        $supplier->delete();
+    public function delete($id) {
+        $supplier = Supplier::find($id);
+        if ($supplier) $supplier->delete();
 
         return response()->json([
-            'message' => 'Supplier deleted successfully'
+            'result'  => true,
+            'message' => 'Supplier deleted successfully',
+            'id'      => $id,
         ]);
     }
 }

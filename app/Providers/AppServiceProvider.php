@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider {
 
             if (File::exists($provider)) {
                 $class = "Modules\\{$moduleName}\\{$moduleName}ServiceProvider";
-                // $this->app->register($class);
+                $this->app->register($class);
             }
         }
     }

@@ -13,14 +13,6 @@
             'badge' => null,
         ],
         [
-            'key' => 'reservations',
-            'route' => 'reservations.index',
-            'pattern' => 'reservations.*',
-            'icon' => 'bi bi-journal-bookmark',
-            'text' => 'Reservations',
-            'badge' => 'reservation_count',
-        ],
-        [
             'key' => 'tasks',
             'route' => 'tasks.index',
             'pattern' => 'tasks.*',
@@ -53,12 +45,12 @@
             'badge' => 'bus_count',
         ],
         [
-            'key' => 'hotels',
-            'route' => 'hotels.index',
-            'pattern' => 'hotels.*',
+            'key' => 'sites',
+            'route' => 'sites.index',
+            'pattern' => 'sites.*',
             'icon' => 'bi bi-building',
-            'text' => 'Hotels',
-            'badge' => 'hotel_count',
+            'text' => 'Sites',
+            'badge' => 'site_count',
         ],
         [
             'key' => 'guests',
@@ -172,8 +164,6 @@
     </div>
 
     <nav class="nav-items flex-grow-1 py-3 ">
-        
-
 
         @foreach ($sidebarItems as $item)
             @if (in_array($item['key'], $permissions))
@@ -196,6 +186,51 @@
     </nav>
 
     <div class="mt-auto border-top border-white border-opacity-10 pt-3">
+        {{-- Modules --}}
+        @foreach ($modules as $module)
+            @if (isset($module['menu']))
+                <div class="nav-item">
+                    <a class="nav-link d-flex align-items-center px-4 py-3 text-white text-decoration-none
+                {{ request()->routeIs($module['menu']['route'] ?? '') ? 'active' : '' }}"
+                        @if (!empty($module['menu']['children'])) data-bs-toggle="collapse"
+                    href="#{{ $module['slug'] }}Submenu"
+                    role="button"
+                    aria-expanded="{{ collect($module['menu']['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'true' : 'false' }}"
+                    aria-controls="{{ $module['slug'] }}Submenu"
+                @elseif(isset($module['menu']['route']))
+                    href="{{ route($module['menu']['route']) }}"
+                @else
+                    href="#" @endif>
+                        <i class="bi bi-{{ $module['menu']['icon'] }} me-3 fs-5"></i>
+                        <span class="nav-text">{{ $module['menu']['title'] }}</span>
+
+                        @if (!empty($module['menu']['children']))
+                            <i class="bi bi-chevron-down ms-auto"></i>
+                        @endif
+                    </a>
+
+                    {{-- If the module has children, render collapsible submenu --}}
+                    @if (!empty($module['menu']['children']))
+                        <div class="collapse {{ collect($module['menu']['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'show' : '' }}"
+                            id="{{ $module['slug'] }}Submenu">
+                            <ul class="nav flex-column ms-4">
+                                @foreach ($module['menu']['children'] as $child)
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none
+                                    {{ request()->routeIs($child['route']) ? 'active' : '' }}"
+                                            href="{{ route($child['route']) }}">
+                                            <i class="bi bi-{{ $child['icon'] }} me-2"></i>
+                                            <span class="nav-text">{{ $child['title'] }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+            @endif
+        @endforeach
+
         @foreach ($menu as $main)
             @if (in_array($main['key'], $permissions))
                 <div class="nav-item">
@@ -345,12 +380,10 @@
         });
 
         // Fetch counts
+        @if(false)
         fetch("{{ route('sidebar.counts') }}")
             .then(res => res.json())
             .then(data => {
-                @if (in_array('reservations', $permissions))
-                    document.getElementById("reservation_count").innerText = data.reservation_count;
-                @endif
                 @if (in_array('tasks', $permissions))
                     document.getElementById("task_count").innerText = data.task_count;
                 @endif
@@ -373,5 +406,6 @@
                     document.getElementById("scan_count").innerText = data.scan_count;
                 @endif
             });
+        @endif
     });
 </script>

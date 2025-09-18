@@ -8,17 +8,16 @@ return [
     // Sidebar / Navigation definition
     'menu' => [
         'title'    => 'Stock',
-        'icon'     => 'boxes', // FontAwesome or Lucide icon
-        'route'    => 'inventories.index',
+        'icon'     => 'boxes',
         'children' => [
             [
                 'title' => 'Inventory',
-                'icon'  => 'warehouse',
+                'icon'  => 'dropbox',
                 'route' => 'inventories.index',
             ],
             [
                 'title' => 'Products',
-                'icon'  => 'box',
+                'icon'  => 'box-seam',
                 'route' => 'products.index',
             ],
             [

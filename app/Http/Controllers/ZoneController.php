@@ -13,7 +13,7 @@ class ZoneController extends Controller {
         $data['zones'] = Zone::withCount('hotels')->with('type')->get();
 
         // You might also want types for dropdowns (only type "Zones")
-        $data['types'] = Type::where('name', 'Zones')->first()->subTypes;
+        $data['types'] = Type::where('name', 'Zones')->first()->subTypes ?? [];
 
         return view('zones.index', $data);
     }

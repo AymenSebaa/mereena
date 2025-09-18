@@ -27,14 +27,15 @@
             <x-input-error :messages="$errors->get('email')" class="text-danger small mt-1" />
         </div>
 
-        <!-- Password -->
+        <!-- Password
         <div class="mb-3">
             <label for="password" class="form-label">{{ __('Password') }}</label>
             <input id="password" type="password" class="form-control rounded-pill" name="password" required
                 autocomplete="current-password">
             <x-input-error :messages="$errors->get('password')" class="text-danger small mt-1" />
         </div>
-
+        -->
+        
         <!-- Register button -->
         <div class="d-grid mt-4">
             <button type="submit" class="btn btn-primary btn-lg rounded-pill">

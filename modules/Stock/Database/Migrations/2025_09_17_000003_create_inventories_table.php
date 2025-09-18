@@ -5,6 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+    // php artisan migrate --path=/database/migrations/2025_09_17_000003_create_inventories_table.php
     public function up(): void {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();

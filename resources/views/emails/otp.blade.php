@@ -10,10 +10,11 @@
 
     <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 
-        {{-- Banner --}}
+        {{-- Banner 
         <div style="background-color: #fdfdfd; text-align: center; padding: 20px;">
             <img src="{{ asset('icons/iatf.jpg') }}" alt="IATF Banner" style="max-width: 100%; height: auto;">
         </div>
+        --}}
 
         {{-- Content --}}
         <div style="padding: 30px; text-align: center;">
@@ -38,7 +39,7 @@
             </p>
 
             <div style="margin-top: 30px;">
-                <small style="color: #999;">© {{ date('Y') }} TFA. All rights reserved.</small>
+                <small style="color: #999;">© {{ date('Y') }} SCIDT. All rights reserved.</small>
             </div>
         </div>
     </div>

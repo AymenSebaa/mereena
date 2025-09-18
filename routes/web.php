@@ -11,7 +11,6 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\GuestController;
-use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReservationController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\CronController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Middleware\CheckPermission;
@@ -34,18 +34,16 @@ Route::get('/', function () {
 });
 
 // OTP routes (only require auth)
-/*
 Route::middleware(['auth'])->prefix('otp')->group(function () {
     Route::get('/verify', [OtpController::class, 'showVerifyForm'])->name('otp.verify');
     Route::post('/verify', [OtpController::class, 'verify'])->name('otp.verify.submit')->middleware('throttle:10,10');
     Route::post('/resend', [OtpController::class, 'resend'])->name('otp.resend')->middleware('throttle:10,10');
     Route::get('/remaining', [OtpController::class, 'remaining'])->name('otp.remaining');
 });
-*/
 
 // Protected routes (require auth + OTP verification)
 // Route::middleware(['auth' /*, 'otp.verified'*/ ])->group(function () {
-Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
+Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -69,15 +67,6 @@ Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
     Route::middleware([CheckPermission::class . ':events'])->prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('events.index');
         Route::get('/live', [EventController::class, 'live'])->name('events.live');
-    });
-
-    Route::middleware([CheckPermission::class . ':hotels'])->prefix('hotels')->group(function () {
-        Route::get('/', [HotelController::class, 'index'])->name('hotels.index');
-        Route::get('/live', [HotelController::class, 'live'])->name('hotels.live');
-        Route::get('/qrcodes', [HotelController::class, 'bulkQRCodes'])->name('hotels.qrcodes');
-        Route::get('/{hotel}/qrcode', [HotelController::class, 'singleQRCode'])->name('hotels.qrcode');
-        Route::get('/fetch', [HotelController::class, 'fetch'])->name('hotel.fetch');
-        Route::get('/list', [HotelController::class, 'listHotels'])->name('hotels.list');
     });
 
     Route::middleware([CheckPermission::class . ':buses'])->prefix('buses')->group(function () {
@@ -133,6 +122,12 @@ Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
         Route::post('/{id}/hotel', [ZoneController::class, 'hotel'])->name('zones.hotel');
     });
 
+    Route::middleware([CheckPermission::class . ':sites'])->prefix('sites')->group(function () {
+        Route::get('/', [SiteController::class, 'index'])->name('sites.index');
+        Route::post('/upsert', [SiteController::class, 'upsert'])->name('sites.upsert');
+        Route::delete('/delete/{id}', [SiteController::class, 'delete'])->name('sites.delete');
+    });
+
     Route::middleware([CheckPermission::class . ':complaints'])->prefix('complaints')->group(function () {
         Route::get('/{id?}', [ComplaintController::class, 'index'])->name('complaints.index');
         Route::post('/upsert', [ComplaintController::class, 'upsert'])->name('complaints.upsert');
@@ -168,8 +163,7 @@ Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
         Route::get('/supervisor-zone/{supervisor?}', [ReportController::class, 'supervisorZone'])->name('reports.supervisor-zone');
     });
 
-
-    
+    /*
     Route::get('/dump-autoload', function () {
         Artisan::call('optimize:clear');
         Artisan::call('config:clear');
@@ -177,8 +171,7 @@ Route::middleware(['auth' /*, EnsureOtpVerified::class*/ ])->group(function () {
         Artisan::call('view:clear');
         return 'Autoload refreshed';
     });
-    
-
+    */
 });
 
 

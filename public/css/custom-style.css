@@ -1083,15 +1083,15 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
-/* Claims Section */
-.claims-container {
+/* dls Section */
+.dls-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
 
-.claim-card {
+.dl-card {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 16px;
     padding: 20px;
@@ -1102,17 +1102,17 @@ body {
     animation: slideUp 0.5s ease-out;
 }
 
-[data-theme="dark"] .claim-card {
+[data-theme="dark"] .dl-card {
     background: rgba(30, 41, 59, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.claim-card:hover {
+.dl-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.claim-header {
+.dl-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1121,12 +1121,12 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.claim-title {
+.dl-title {
     font-weight: 600;
     color: var(--text-color);
 }
 
-.claim-status {
+.dl-status {
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 12px;
@@ -1148,23 +1148,23 @@ body {
     color: var(--success);
 }
 
-.claim-details {
+.dl-details {
     margin-bottom: 15px;
 }
 
-.claim-meta {
+.dl-meta {
     display: flex;
     justify-content: space-between;
     color: var(--gray);
     font-size: 14px;
 }
 
-.claim-actions {
+.dl-actions {
     display: flex;
     gap: 10px;
 }
 
-.claim-btn {
+.dl-btn {
     padding: 8px 15px;
     border-radius: 8px;
     font-size: 14px;
@@ -1256,4 +1256,94 @@ body {
     background: transparent !important;
     pointer-events: none !important;
     /* allow clicking through */
+}
+
+[data-theme="dark"] .modal-content {
+    background: rgba(30, 41, 59, 0.95);
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .breadcrumb {
+    background: rgba(30, 41, 59, 0.7);
+    border-radius: 8px;
+    color: #f1f5f9;
+}
+
+.pagination-btn {
+    border: 1px solid #ddd;
+    padding: 6px 12px;
+    margin: 0 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+.form-control,
+.form-select {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #333;
+    transition: background 0.6s ease, color 0.6s ease, border 0.6s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(231, 1, 71, 0.25);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+/* Light theme placeholder */
+.form-control::placeholder,
+.form-select::placeholder {
+    color: #999; /* light gray */
+    opacity: 1;  /* ensure full visibility */
+}
+
+/* Dark theme placeholder */
+[data-theme="dark"] .form-control::placeholder,
+[data-theme="dark"] .form-select::placeholder {
+    color: #bbb; /* lighter gray for dark mode */
+    opacity: 1;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 50%;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.dl-glass {
+    backdrop-filter: blur(4px);
 }
