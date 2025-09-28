@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller {
@@ -23,11 +24,14 @@ class SiteController extends Controller {
             return response()->json($sites);
         }
 
-        return view('sites.index');
+        $data['types'] = Type::where('name', 'Sites')->first()->subTypes ?? [];
+
+        return view('sites.index', $data);
     }
 
     public function upsert(Request $request, $id = null) {
         $validated = $request->validate([
+            'type_id' => 'nullable|exists:types,id',
             'name'    => 'required|string|max:255',
             'address' => 'nullable|string|max:500',
             'lat'     => 'nullable|numeric',
@@ -59,7 +63,7 @@ class SiteController extends Controller {
     }
 
     public static function getUserQuery($user) {
-        $query = Site::query();
+        $query = Site::with('type');
         $profile = $user->profile ?? null;
 
         if ($profile && in_array($profile->role_id, [3, 4, 6, 10])) {

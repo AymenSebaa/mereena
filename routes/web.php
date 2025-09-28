@@ -163,7 +163,7 @@ Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
         Route::get('/supervisor-zone/{supervisor?}', [ReportController::class, 'supervisorZone'])->name('reports.supervisor-zone');
     });
 
-    /*
+    
     Route::get('/dump-autoload', function () {
         Artisan::call('optimize:clear');
         Artisan::call('config:clear');
@@ -171,7 +171,7 @@ Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
         Artisan::call('view:clear');
         return 'Autoload refreshed';
     });
-    */
+    
 });
 
 

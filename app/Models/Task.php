@@ -10,7 +10,7 @@ class Task extends Model {
 
     protected $fillable = [
         'external_id',
-        'hotel_id',
+        'site_id',
         'device_id',
         'user_id',
         'title',
@@ -38,8 +38,8 @@ class Task extends Model {
         'directions' => 'array',
     ];
 
-    public function hotel() {
-        return $this->belongsTo(Hotel::class, 'hotel_id', 'id');
+    public function site() {
+        return $this->belongsTo(Hotel::class, 'site_id', 'id');
     }
 
     public function bus() {

@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider {
      * Register any application services.
      */
     public function register(): void {
-        $this->registerModules();
+        $this->loadServiceProviders();
     }
 
     /**
@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider {
     /**
      * Auto-register all module service providers.
      */
-    protected function registerModules(): void {
+    protected function loadServiceProviders(): void {
         $modulesPath = base_path('modules');
 
         if (!File::exists($modulesPath)) {

@@ -45,23 +45,24 @@
 
             pageSites.forEach(site => {
                 const html = `
-            <div class="dl-card" data-id="${site.id}">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="dl-title">${_(site.name)}</div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-warning" onclick='openEditSite(${JSON.stringify(site)})'>
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="openDeleteSite(${site.id})">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                <div class="dl-card" data-id="${site.id}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="dl-title">${_(site.name)}</div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-warning rounded-pill" onclick='openEditSite(${JSON.stringify(site)})'>
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill" onclick="openDeleteSite(${site.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dl-details mb-2">
+                        <p><i class="bi bi-tag me-1"></i> ${_(site.type.name)}</p>
+                        <p><i class="bi bi-geo-alt me-1"></i> ${_(site.lat)}, ${_(site.lng)}</p>
                     </div>
                 </div>
-                <div class="dl-details mb-2">
-                    <p><i class="bi bi-geo-alt me-1"></i> ${_(site.lat)}, ${_(site.lng)}</p>
-                </div>
-            </div>
-        `;
+            `;
                 container.append(html);
             });
 
