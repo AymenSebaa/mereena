@@ -41,8 +41,10 @@ class SiteController extends Controller {
         );
 
         return response()->json([
-            'result'  => true,
-            'message' => $request->input('id') ? 'Site updated successfully' : 'Site created successfully',
+            'status'  => 'success',
+            'message' => $request->input('id') 
+                ? "Site $site->name updated successfully" 
+                : "Site $site->name created successfully",
             'data'    => $site,
         ]);
     }
@@ -52,8 +54,8 @@ class SiteController extends Controller {
         if ($site) $site->delete();
 
         return response()->json([
-            'result'  => true,
-            'message' => 'Site deleted successfully',
+            'status'  => 'success',
+            'message' => "Site $site->name deleted successfully",
             'id'      => $id,
         ]);
     }

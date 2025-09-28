@@ -40,9 +40,10 @@
             })
             .then(res => res.json())
             .then(data => {
-                if (data.result) {
+                if (res.status == 'success') {
                     fetchSites();
                     bootstrap.Modal.getInstance(document.getElementById('deleteSiteModal')).hide();
+                    showToast(res.message, res.status);
                 }
             })
             .catch(err => console.error(err));

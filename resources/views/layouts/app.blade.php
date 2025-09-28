@@ -55,6 +55,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.3/js/dataTables.min.js"></script>
+
 </head>
 @php
     $permissions = auth()->user()->profile->role->permissions ?? [];
@@ -63,6 +64,8 @@
 <body>
     {{-- @include('partials.install-pwa') --}}
     @include('partials.update-location')
+
+    @include('partials.toaster')
 
     <div class="app-container">
         {{-- Mobile bottom bar --}}

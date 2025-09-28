@@ -86,4 +86,20 @@ class CityController extends Controller {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function search(Request $request) {
+        $q = $request->q;
+        $cities = City::with('state')
+            ->where('name', 'like', "%{$q}%")
+            ->limit(20)
+            ->get()
+            ->map(fn($c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'state_id' => $c->state_id,
+                'state_name' => $c->state->name ?? null
+            ]);
+
+        return response()->json($cities);
+    }
 }
