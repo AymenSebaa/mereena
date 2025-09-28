@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Customers')
+@section('title', 'Guests')
 
 @section('content')
     <div class="mobile-padding">
         <!-- Map -->
         <div class="overlay-card w-100 mb-4" {{ auth()->user()->email == 'pcc-tfl@gmail.com' ? '' : 'hidden' }}>
             <div class="card-title">
-                <span>Customers Map</span>
-                <small class="text-secondary">Location of registered customers</small>
+                <span>Guests Map</span>
+                <small class="text-secondary">Location of registered guests</small>
             </div>
             <div class="alerts-section p-0 overflow-hidden">
-                <div id="customers-map" style="width: 100%; height: 500px; border-radius: 0 0 20px 20px;"></div>
+                <div id="guests-map" style="width: 100%; height: 500px; border-radius: 0 0 20px 20px;"></div>
             </div>
         </div>
 
@@ -21,8 +21,8 @@
                 placeholder="Search by name, email, hotel, country...">
         </div>
 
-        <!-- Customer Cards -->
-        <div id="customers-container" class="customers-container"></div>
+        <!-- Guest Cards -->
+        <div id="guests-container" class="guests-container"></div>
 
         <!-- Pagination -->
         <div id="pagination" class="mt-4 d-flex justify-content-center"></div>
@@ -31,7 +31,7 @@
 
 @push('scripts')
     <style>
-        .customers-container {
+        .guests-container {
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
@@ -39,18 +39,18 @@
         }
 
         @media (min-width: 768px) {
-            .customers-container {
+            .guests-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1200px) {
-            .customers-container {
+            .guests-container {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        .customer-card {
+        .guest-card {
             background: rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 20px;
@@ -61,17 +61,17 @@
             animation: slideUp 0.5s ease-out;
         }
 
-        [data-theme="dark"] .customer-card {
+        [data-theme="dark"] .guest-card {
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .customer-card:hover {
+        .guest-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .customer-header {
+        .guest-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -80,70 +80,70 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .customer-title {
+        .guest-title {
             font-weight: 600;
             color: var(--text-color);
         }
 
-        .customer-hotel {
+        .guest-hotel {
             font-size: 0.9rem;
             color: var(--gray);
         }
     </style>
 
     <script>
-        let customersData = [];
+        let guestsData = [];
         let currentPage = 1;
         const perPage = 12;
 
         let mapApiReady = false;
 
-        function initCustomersMap() {
+        function initGuestsMap() {
             mapApiReady = true;
             renderMap();
         }
 
-        async function fetchCustomers(search = '') {
+        async function fetchGuests(search = '') {
             try {
                 const res = await fetch(`{{ route('guests.live') }}?search=${encodeURIComponent(search)}`);
-                customersData = await res.json();
+                guestsData = await res.json();
                 currentPage = 1;
-                renderCustomers();
+                renderGuests();
                 renderPagination();
                 renderMap();
             } catch (e) {
-                console.error("Failed to fetch customers", e);
+                console.error("Failed to fetch guests", e);
             }
         }
 
-        function renderCustomers() {
-            const container = document.getElementById('customers-container');
+        function renderGuests() {
+            const container = document.getElementById('guests-container');
             container.innerHTML = '';
             const start = (currentPage - 1) * perPage;
-            const pageItems = customersData.slice(start, start + perPage);
+            const pageItems = guestsData.slice(start, start + perPage);
 
             if (pageItems.length === 0) {
                 container.innerHTML = `
-                <div class="customer-card">
-                    <div class="customer-header"><div class="customer-title">No customers available</div></div>
-                    <div class="customer-details"><p>No registered customers found 🎉</p></div>
+                <div class="guest-card">
+                    <div class="guest-header"><div class="guest-title">No guests available</div></div>
+                    <div class="guest-details"><p>No registered guests found 🎉</p></div>
                 </div>`;
                 return;
             }
 
-            pageItems.forEach(customer => {
-                const scanCount = customer.scans?.length ?? 0;
+            pageItems.forEach(guest => {
+                const scanCount = guest.scans?.length ?? 0;
                 let scanList = '';
                 if (scanCount > 0) {
-                    scanList = `<ul class="mt-2">` + customer.scans.map(s =>
+                    scanList = `<ul class="mt-2">` + guest.scans.map(s =>
                             `<li>${_(s.user.name)} @ ${new Date(_(s.created_at)).toLocaleTimeString()}</li>`).join(
                             '') +
                         `</ul>`;
                 }
 
                 let reservationEl = '';
-                if (customer.reservations.length) {
-                    let r = customer.reservations[0];
+                if (guest.reservations.length) {
+                    let r = guest.reservations[0];
                     const flight = r ? typeof r.content === 'string' ? JSON.parse(r.content) : r.content : null;
 
                     let statusBadge = 'status-pending';
@@ -179,17 +179,17 @@
 
 
                 container.insertAdjacentHTML('beforeend', `
-                <div class="customer-card">
-                    <div class="customer-header">
-                        <div class="customer-title">${_(customer.name ?? '-')}</div>
-                        <div class="customer-hotel">${_(customer.profile?.hotel?.name ?? '-')}</div>
+                <div class="guest-card">
+                    <div class="guest-header">
+                        <div class="guest-title">${_(guest.name ?? '-')}</div>
+                        <div class="guest-hotel">${_(guest.profile?.hotel?.name ?? '-')}</div>
                     </div>
-                    <div class="customer-details">
-                        <p><i class="bi bi-envelope me-1"></i> ${_(customer.email ?? '-')}</p>
-                        <p><i class="bi bi-phone me-1"></i> ${_(customer.profile.phone ?? '-')}</p>
-                        <p><i class="bi bi-flag me-1"></i> ${_(customer.profile?.country?.name_en ?? '-')}</p>
+                    <div class="guest-details">
+                        <p><i class="bi bi-envelope me-1"></i> ${_(guest.email ?? '-')}</p>
+                        <p><i class="bi bi-phone me-1"></i> ${_(guest.profile.phone ?? '-')}</p>
+                        <p><i class="bi bi-flag me-1"></i> ${_(guest.profile?.country?.name_en ?? '-')}</p>
                         <div> ${scanList} </div>
-                        <small class="text-secondary">Joined: ${_(customer.created_at ?? '-')}</small>
+                        <small class="text-secondary">Joined: ${_(guest.created_at ?? '-')}</small>
                     </div>
                     ${reservationEl} 
                 </div>
@@ -198,7 +198,7 @@
         }
 
         function renderPagination() {
-            const totalPages = Math.ceil(customersData.length / perPage);
+            const totalPages = Math.ceil(guestsData.length / perPage);
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
             if (totalPages <= 1) return;
@@ -212,13 +212,13 @@
 
         function goToPage(page) {
             currentPage = page;
-            renderCustomers();
+            renderGuests();
             renderPagination();
         }
 
         function renderMap() {
             if (!mapApiReady) return;
-            const map = new google.maps.Map(document.getElementById('customers-map'), {
+            const map = new google.maps.Map(document.getElementById('guests-map'), {
                 center: {
                     lat: 36.7601,
                     lng: 3.0503
@@ -228,24 +228,24 @@
             });
             const bounds = new google.maps.LatLngBounds();
 
-            customersData.forEach(customer => {
-                if (customer.profile && customer.profile.lat && customer.profile.lng) {
+            guestsData.forEach(guest => {
+                if (guest.profile && guest.profile.lat && guest.profile.lng) {
                     const pos = {
-                        lat: Number(customer.profile.lat),
-                        lng: Number(customer.profile.lng)
+                        lat: Number(guest.profile.lat),
+                        lng: Number(guest.profile.lng)
                     };
                     const marker = new google.maps.Marker({
                         position: pos,
                         map,
-                        title: _(customer.name),
+                        title: _(guest.name),
                         icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                     });
                     const info = new google.maps.InfoWindow({
                         content: `<div class='text-dark' >
-                            <strong>${_(customer.name)}</strong><br>${_(customer.email)}<br>
-                              Hotel: ${_(customer.profile.hotel?.name ?? '-')}<br>
-                              Country: ${_(customer.profile.country?.name_en ?? '-')}<br>
-                              <small>${_(customer.created_at)}</small>
+                            <strong>${_(guest.name)}</strong><br>${_(guest.email)}<br>
+                              Hotel: ${_(guest.profile.hotel?.name ?? '-')}<br>
+                              Country: ${_(guest.profile.country?.name_en ?? '-')}<br>
+                              <small>${_(guest.created_at)}</small>
                             </div>`
                     });
                     marker.addListener("click", () => info.open(map, marker));
@@ -256,12 +256,12 @@
         }
 
         document.getElementById('searchInput').addEventListener('input', e => {
-            fetchCustomers(e.target.value);
+            fetchGuests(e.target.value);
         });
 
-        fetchCustomers();
+        fetchGuests();
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}&callback=initCustomersMap" async
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}&callback=initGuestsMap" async
         defer></script>
 @endpush

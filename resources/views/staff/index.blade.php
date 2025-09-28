@@ -27,7 +27,7 @@
             @endif
         </div>
 
-        <div id="staff-container" class="dls-container"></div>
+        <div id="staff-container" class="staff-container"></div>
 
         <div id="staff-pagination" class="mt-3 d-flex justify-content-center gap-2"></div>
     </div>
@@ -241,24 +241,22 @@
 
             pageStaff.forEach(user => {
                 container.innerHTML += `
-                    <div class="dl-card" data-id="${_(user.id)}">
-                        <div class="dl-header">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar" title="${user.name}">
-                                    ${(_(user.name?.charAt(0).toUpperCase() || 'U'))}
+                    <div class="staff-card" data-id="${_(user.id)}">
+                        <div class="staff-top">
+                            <div class="avatar" title="${user.name}">
+                                ${(_(user.name?.charAt(0).toUpperCase() || 'U'))}
+                            </div>
+                            <div class="staff-meta">
+                                <div class="staff-name">${_(user.name)}</div>
+                                <div class="staff-email text-secondary"> 
+                                    <i class='bi bi-envelope me-1' ></i> ${_(user.email)} 
                                 </div>
-                                <div class="staff-meta ms-3">
-                                    <div class="staff-name">${_(user.name)}</div>
-                                    <div class="staff-email text-secondary"> 
-                                        <i class='bi bi-envelope me-1' ></i> ${_(user.email)} 
-                                    </div>
-                                    <div class="staff-email text-secondary"> 
-                                        <i class='bi bi-phone me-1' ></i> ${_(user.profile?.phone ?? '-')}
-                                    </div>
+                                <div class="staff-email text-secondary"> 
+                                    <i class='bi bi-phone me-1' ></i> ${_(user.profile?.phone ?? '-')}
                                 </div>
                             </div>
                             @if (in_array($role_id, [1, 2]))
-                            <div class="dl-actions">
+                            <div class="staff-actions">
                                 <button class="icon-btn edit" onclick='editStaff(${JSON.stringify(user)})'>
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
@@ -269,7 +267,7 @@
                             @endif
                         </div>
 
-                        <div class="dl-badges mt-3">
+                        <div class="staff-badges mt-3">
                             <span class="badge role-badge">
                                 <i class="bi bi-people me-1"></i> ${_(user.profile?.role?.name ?? '-')}
                             </span>
@@ -284,7 +282,7 @@
                            <i class='bi bi-key me-1' ></i> OTP: ${_(user.lastOtp?.code ?? 'N/A')} | EXP: ${_(user.lastOtp?.expires_at ?? '-')}
                         </small>
 
-                        <div class="dl-footer mt-2 text-secondary small">
+                        <div class="staff-footer mt-2 text-secondary small">
                             Joined: ${_(user.created_at ? user.created_at.substring(0,10) : '-')}
                         </div>
                     </div>`;
@@ -415,3 +413,208 @@
         defer></script>
 @endpush
 
+@push('scripts')
+    <style>
+        /* Glass modal effect */
+        .modal-content.glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+        }
+
+        [data-theme="dark"] .modal-content.glass-card {
+            background: rgba(17, 24, 39, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-content.glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .modal-content.glass-card {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* STAFF CARDS - glassy & polished */
+        .staff-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+        }
+
+        .staff-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.75));
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform .18s ease, box-shadow .18s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .staff-card {
+            background: linear-gradient(180deg, rgba(23, 31, 45, 0.85), rgba(23, 31, 45, 0.75));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .staff-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(2, 6, 23, 0.12);
+        }
+
+        .staff-top {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #6ee7b7, #3b82f6);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.15);
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        [data-theme="dark"] .avatar {
+            background: linear-gradient(135deg, #16a34a, #2563eb);
+        }
+
+        .staff-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .staff-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .staff-email {
+            font-size: 13px;
+        }
+
+        .staff-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            border: none;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .12s ease, transform .12s ease;
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .icon-btn.edit {
+            color: #d97706;
+            background: rgba(245, 158, 11, 0.06);
+        }
+
+        .icon-btn.delete {
+            color: #dc2626;
+            background: rgba(239, 68, 68, 0.06);
+        }
+
+        .staff-badges .badge {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            padding: 6px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] .staff-badges .badge {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* GLASS MODAL - matches complaint cards */
+        .modal-content.glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
+            padding: 0;
+        }
+
+        [data-theme="dark"] .modal-content.glass-card {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* ensure modal sits above everything and is interactive */
+        .modal {
+            z-index: 2100;
+        }
+
+        .modal .modal-dialog {
+            pointer-events: auto;
+        }
+
+        /* modal dialog entrance */
+        .modal .modal-dialog {
+            transform: translateY(8px) scale(.995);
+            transition: transform .22s cubic-bezier(.2, .9, .2, 1), opacity .22s ease;
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0) scale(1);
+        }
+
+        .pagination-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 0 2px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pagination-btn.active {
+            background: #3b82f6;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+@endpush

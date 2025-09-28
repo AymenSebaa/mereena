@@ -1,11 +1,11 @@
-<button class="btn btn-primary rounded-pill ms-3" onclick="openNewSite()">
+<button class="btn btn-primary ms-3" onclick="openNewSite()">
     <i class="bi bi-plus-lg"></i> New Site
 </button>
 
 <!-- Upsert Modal -->
 <div class="modal fade" id="upsertSiteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content glass-card">
+        <div class="modal-content dl-glass">
             <div class="modal-header">
                 <h5 class="modal-title" id="siteModalTitle">Upsert Site</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -18,20 +18,12 @@
                 <input type="hidden" name="geofence" id="site_geofence">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Type</label>
-                        <select class="form-control rounded-pill" name="type_id" id="site_type_id">
-                            @foreach ($types as $t)
-                                <option value="{{ $t->id }}">{{ $t->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label>Name</label>
-                        <input type="text" class="form-control rounded-pill" name="name" id="site_name" required>
+                        <input type="text" class="form-control" name="name" id="site_name" required>
                     </div>
                     <div class="mb-3">
                         <label>Address</label>
-                        <input type="text" class="form-control rounded-pill" name="address" id="site_address">
+                        <input type="text" class="form-control" name="address" id="site_address">
                     </div>
                     <div class="mb-3">
                         <label>Site Location & Geofence</label>
@@ -39,8 +31,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-dark rounded-pill" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-success rounded-pill" type="submit" >Save Site</button>
+                    <button class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Site</button>
                 </div>
             </form>
         </div>
@@ -62,7 +54,6 @@
     function openEditSite(site) {
         $('#upsertSiteForm')[0].reset();
         $('#site_id').val(site.id);
-        $('#site_type_id').val(site.type_id);
         $('#site_name').val(site.name);
         $('#site_address').val(site.address);
         $('#site_lat').val(site.lat);

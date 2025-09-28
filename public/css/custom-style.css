@@ -1,26 +1,25 @@
 :root {
     /* Light mode variables (default) */
-    --primary: #2563eb;            /* Healthcare blue */
-    --primary-dark: #1d4ed8;       /* Darker healthcare blue */
-    --secondary: #10b981;          /* Pharmacy green */
-    --accent: #f97316;             /* Energy orange */
-    --light: #f9fafb;              /* Light background */
-    --dark: #111827;               /* Dark gray for text */
-    --success: #10b981;            /* Success/health green */
-    --warning: #f59e0b;            /* Warning yellow */
-    --danger: #ef4444;             /* Error red */
-    --gray: #6b7280;               /* Neutral gray */
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --light: #f8fafc;
+    --dark: #1e293b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --gray: #64748b;
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    --bg-gradient: linear-gradient(135deg, #f0f9ff, #e0f2fe); /* Light clean gradient */
-    --app-bg: rgba(255, 255, 255, 0.85);
+    --bg-gradient: linear-gradient(135deg, #f0f4ff, #e6e6ff);
+    --app-bg: rgba(255, 255, 255, 0.8);
     --text-color: var(--dark);
-    --text-muted-color: #6b7280; /* Neutral gray */
     --sidebar-bg: linear-gradient(180deg, var(--primary), var(--primary-dark));
-    --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.5));
-    --card-border: 1px solid rgba(255, 255, 255, 0.4);
-    --header-bg: rgba(255, 255, 255, 0.75);
+    --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+    --card-border: 1px solid rgba(255, 255, 255, 0.5);
+    --header-bg: rgba(255, 255, 255, 0.7);
     --search-bg: rgba(255, 255, 255, 0.6);
-    --search-focus-bg: rgba(255, 255, 255, 0.95);
+    --search-focus-bg: rgba(255, 255, 255, 0.9);
     --overlay-bg: rgba(255, 255, 255, 0.9);
     --notification-bg: rgba(255, 255, 255, 0.95);
 }
@@ -28,18 +27,16 @@
 [data-theme="dark"] {
     /* Dark mode variables */
     --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
-    --app-bg: rgba(0, 0, 0, 0.75);
+    --app-bg: rgba(0, 0, 0, 0.7);
     --text-color: #f8fafc;
-    --text-muted-color: #9ca3af; /* Lighter gray for visibility on dark */
-    --card-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(30, 41, 59, 0.5));
+    --card-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.4));
     --card-border: 1px solid rgba(255, 255, 255, 0.1);
-    --header-bg: rgba(30, 41, 59, 0.75);
+    --header-bg: rgba(30, 41, 59, 0.7);
     --search-bg: rgba(30, 41, 59, 0.6);
     --search-focus-bg: rgba(30, 41, 59, 0.9);
     --overlay-bg: rgba(30, 41, 59, 0.9);
     --notification-bg: rgba(30, 41, 59, 0.95);
 }
-
 
 * {
     margin: 0;
@@ -54,11 +51,6 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
-}
-
-/* Muted text utility */
-.text-muted {
-    color: var(--text-muted-color) !important;
 }
 
 /* App Container with Glass Morphism Effect */
@@ -371,59 +363,13 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
 }
 
-.icon-site {
+.icon-hotel {
     background: linear-gradient(135deg, var(--secondary), #0d966c);
 }
 
 .icon-complaint {
     background: linear-gradient(135deg, var(--accent), #e57f08);
 }
-
-/* Existing example */
-.icon-complaint {
-    background: linear-gradient(135deg, var(--accent), #e57f08);
-}
-
-/* Alerts */
-.icon-alert {
-    background: linear-gradient(135deg, #f59e0b, #e57f08);
-}
-
-/* Sites */
-.icon-site {
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
-}
-
-/* Pharmacies */
-.icon-pharmacy {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
-
-/* Clinics */
-.icon-clinic {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-}
-
-/* Doctors */
-.icon-doctor {
-    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-}
-
-/* Visits */
-.icon-visits {
-    background: linear-gradient(135deg, #ec4899, #be185d);
-}
-
-/* Sales */
-.icon-sales {
-    background: linear-gradient(135deg, #22c55e, #15803d);
-}
-
-/* Orders */
-.icon-orders {
-    background: linear-gradient(135deg, #f97316, #c2410c);
-}
-
 
 .stat-number {
     position: absolute;
@@ -1146,25 +1092,24 @@ body {
 }
 
 .dl-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.75));
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    transition: transform .18s ease, box-shadow .18s ease;
-    position: relative;
-    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
 }
 
 [data-theme="dark"] .dl-card {
-    background: linear-gradient(180deg, rgba(23, 31, 45, 0.85), rgba(23, 31, 45, 0.75));
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dl-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(2, 6, 23, 0.12);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .dl-header {
@@ -1313,6 +1258,11 @@ body {
     /* allow clicking through */
 }
 
+[data-theme="dark"] .modal-content {
+    background: rgba(30, 41, 59, 0.95);
+    color: #f1f5f9;
+}
+
 [data-theme="dark"] .breadcrumb {
     background: rgba(30, 41, 59, 0.7);
     border-radius: 8px;
@@ -1365,17 +1315,14 @@ body {
 /* Light theme placeholder */
 .form-control::placeholder,
 .form-select::placeholder {
-    color: #999;
-    /* light gray */
-    opacity: 1;
-    /* ensure full visibility */
+    color: #999; /* light gray */
+    opacity: 1;  /* ensure full visibility */
 }
 
 /* Dark theme placeholder */
 [data-theme="dark"] .form-control::placeholder,
 [data-theme="dark"] .form-select::placeholder {
-    color: #bbb;
-    /* lighter gray for dark mode */
+    color: #bbb; /* lighter gray for dark mode */
     opacity: 1;
 }
 
@@ -1399,148 +1346,4 @@ body {
 
 .dl-glass {
     backdrop-filter: blur(4px);
-}
-
-/* --- Glass Modal --- */
-.modal-content.glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-    padding: 0;
-}
-
-[data-theme="dark"] .modal-content.glass-card {
-    background: rgba(17, 24, 39, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* modal layering & animation */
-.modal {
-    z-index: 2100;
-}
-
-.modal .modal-dialog {
-    pointer-events: auto;
-    transform: translateY(8px) scale(.995);
-    transition: transform .22s cubic-bezier(.2, .9, .2, 1), opacity .22s ease;
-}
-
-.modal.show .modal-dialog {
-    transform: translateY(0) scale(1);
-}
-
-/* --- Glass Card (generic) --- */
-.glass-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.75));
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    transition: transform .18s ease, box-shadow .18s ease;
-    overflow: hidden;
-}
-
-[data-theme="dark"] .glass-card {
-    background: linear-gradient(180deg, rgba(23, 31, 45, 0.85), rgba(23, 31, 45, 0.75));
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-}
-
-.glass-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(2, 6, 23, 0.12);
-}
-
-[data-theme="dark"] .btn-close {
-    filter: invert(1);
-}
-
-/* --- Avatars --- */
-.avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: #fff;
-    font-size: 20px;
-    background: linear-gradient(135deg, #6ee7b7, #3b82f6);
-    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.15);
-    flex-shrink: 0;
-}
-
-[data-theme="dark"] .avatar {
-    background: linear-gradient(135deg, #16a34a, #2563eb);
-}
-
-/* --- Icon Buttons --- */
-.icon-btn {
-    border: none;
-    background: rgba(0, 0, 0, 0.04);
-    color: var(--text-color);
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background .12s ease, transform .12s ease;
-}
-
-.icon-btn:hover {
-    transform: translateY(-2px);
-    background: rgba(0, 0, 0, 0.06);
-}
-
-.icon-btn.edit {
-    color: #d97706;
-    background: rgba(245, 158, 11, 0.06);
-}
-
-.icon-btn.delete {
-    color: #dc2626;
-    background: rgba(239, 68, 68, 0.06);
-}
-
-/* --- Badges --- */
-.badge.glass {
-    display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 4px;
-    padding: 6px 8px;
-    border-radius: 10px;
-    font-size: 12px;
-    background: rgba(0, 0, 0, 0.04);
-    color: var(--text-color);
-}
-
-[data-theme="dark"] .badge.glass {
-    background: rgba(255, 255, 255, 0.03);
-}
-
-/* --- Pagination Buttons --- */
-.pagination-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    margin: 0 2px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.pagination-btn.active {
-    background: #3b82f6;
-    color: white;
-    font-weight: bold;
-}
-
-.pagination-btn:hover {
-    background: rgba(59, 130, 246, 0.2);
 }

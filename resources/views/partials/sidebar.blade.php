@@ -12,7 +12,6 @@
             'text' => 'Dashboard',
             'badge' => null,
         ],
-        /*
         [
             'key' => 'tasks',
             'route' => 'tasks.index',
@@ -21,7 +20,6 @@
             'text' => 'Departures',
             'badge' => 'task_count',
         ],
-        */
         [
             'key' => 'events',
             'route' => 'events.index',
@@ -38,7 +36,6 @@
             'text' => 'Complaints',
             'badge' => 'complaint_count',
         ],
-        /*
         [
             'key' => 'buses',
             'route' => 'buses.index',
@@ -47,7 +44,6 @@
             'text' => 'Buses',
             'badge' => 'bus_count',
         ],
-        */
         [
             'key' => 'sites',
             'route' => 'sites.index',
@@ -61,7 +57,7 @@
             'route' => 'guests.index',
             'pattern' => 'guests.*',
             'icon' => 'bi bi-people',
-            'text' => 'Customers',
+            'text' => 'Guests',
             'badge' => 'guest_count',
         ],
         [

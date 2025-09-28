@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Bus;
 use App\Models\Complaint;
 use App\Models\Event;
-use App\Models\Site;
+use App\Models\Hotel;
 use App\Models\Task;
 
 class DashboardController extends Controller {
@@ -18,7 +18,7 @@ class DashboardController extends Controller {
 
         // Initialize counts
         $busesCount = Bus::count();
-        $sitesCount = Site::count();
+        $hotelsCount = Hotel::count();
         $complaintsCount = Complaint::count();
         $eventsCount = Event::count();
         $tasksCount = Task::count();
@@ -30,7 +30,7 @@ class DashboardController extends Controller {
             ->get([
                 'id',
                 'title',
-                'site_id',
+                'hotel_id',
                 'pickup_address',
                 'pickup_address_lat',
                 'pickup_address_lng',
@@ -43,7 +43,7 @@ class DashboardController extends Controller {
         $event_count = EventController::getUserQuery($user)->count();
         $complaint_count = ComplaintController::getUserQuery($user)->count();
         $bus_count = BusController::getUserQuery($user)->count();
-        $site_count = SiteController::getUserQuery($user)->count();
+        $hotel_count = HotelController::getUserQuery($user)->count();
         $guest_count = GuestController::getUserQuery($user)->count();
         
         // QR payload
@@ -60,7 +60,7 @@ class DashboardController extends Controller {
             'event_count',
             'complaint_count',
             'bus_count',
-            'site_count',
+            'hotel_count',
             'locations',
             'recentTasks',
             'qrcode'
