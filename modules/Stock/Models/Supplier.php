@@ -8,12 +8,11 @@ use Modules\Stock\Models\Inventory;
 
 class Supplier extends Model {
     protected $fillable = [
-        'company_id',
         'name',
+        'contact',
         'email',
         'phone',
         'address',
-        'contact_name',
     ];
 
     public function company() {

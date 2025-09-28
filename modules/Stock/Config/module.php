@@ -11,19 +11,24 @@ return [
         'icon'     => 'boxes',
         'children' => [
             [
+                'title' => 'Orders',
+                'icon'  => 'receipt',
+                'route' => 'stock.orders.index',
+            ],
+            [
                 'title' => 'Inventory',
                 'icon'  => 'dropbox',
-                'route' => 'inventories.index',
+                'route' => 'stock.inventories.index',
             ],
             [
                 'title' => 'Products',
                 'icon'  => 'box-seam',
-                'route' => 'products.index',
+                'route' => 'stock.products.index',
             ],
             [
                 'title' => 'Suppliers',
                 'icon'  => 'truck',
-                'route' => 'suppliers.index',
+                'route' => 'stock.suppliers.index',
             ],
         ],
     ],
@@ -42,5 +47,10 @@ return [
         'create_suppliers',
         'edit_suppliers',
         'delete_suppliers',
+
+        'view_orders',
+        'create_orders',
+        'edit_orders',
+        'delete_orders',
     ],
 ];

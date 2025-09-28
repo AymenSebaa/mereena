@@ -3,6 +3,7 @@
 namespace Modules\Stock\Models;
 
 use App\Models\Company;
+use App\Models\Type;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,10 +12,10 @@ class Product extends Model {
 
     protected $fillable = [
         'company_id',
+        'category_id',
         'name',
         'sku',
         'description',
-        'category',
         'brand',
         'images',
         'price'
@@ -26,6 +27,10 @@ class Product extends Model {
 
     public function company() {
         return $this->belongsTo(Company::class);
+    }
+
+    public function category() {
+        return $this->belongsTo(Type::class, 'category_id');
     }
 
     public function inventories() {

@@ -2,7 +2,6 @@
 
 namespace Modules\Stock\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,9 +11,10 @@ class Inventory extends Model {
     protected $fillable = [
         'product_id',
         'supplier_id',
+        'price',
+        'quantity',
         'made_at',
         'expires_at',
-        'quantity',
         'cost_price',
         'batch_no'
     ];
@@ -26,6 +26,6 @@ class Inventory extends Model {
     }
 
     public function supplier() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Supplier::class);
     }
 }

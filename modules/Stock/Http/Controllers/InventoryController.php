@@ -4,58 +4,68 @@ namespace Modules\Stock\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
-use Modules\Product\Entities\Supplier;
 use Modules\Stock\Models\Inventory;
 use Modules\Stock\Models\Product;
+use Modules\Stock\Models\Supplier;
 
 class InventoryController extends Controller {
+    /**
+     * Display a listing of inventories.
+     */
     public function index() {
-        $data['inventories'] = Inventory::with(['product', 'supplier'])->get();
-        $data['products']    = Product::all();
-        $data['suppliers']   = Supplier::all();
+        $inventories = Inventory::with(['product', 'supplier'])->get();
+        $products    = Product::all();
+        $suppliers   = Supplier::all();
 
-        return view('stock::inventories.index', $data);
+        return view('stock::inventories.index', compact('inventories', 'products', 'suppliers'));
     }
 
-    public function upsert(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'product_id' => ['required', 'exists:products,id'],
-            'supplier_id' => ['required', 'exists:suppliers,id'],
-            'quantity'   => ['required', 'numeric', 'min:0'],
-            'made_at'    => ['nullable', 'date'],
-            'expires_at' => ['nullable', 'date', 'after_or_equal:made_at'],
+    /**
+     * Store or update an inventory.
+     */
+    public function upsert(Request $request, $id = null) {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'price'      => 'required|numeric|min:0',
+            'quantity'   => 'required|numeric|min:0',
+            'made_at'    => 'nullable|date',
+            'expires_at' => 'nullable|date|after_or_equal:made_at',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()], 422);
-        }
+        $inventory = Inventory::updateOrCreate(
+            ['id' => $request->input('id') ?? $id],
+            $validated
+        );
 
-        if ($request->id) {
-            $inventory = Inventory::findOrFail($request->id);
-            $message = 'Inventory updated successfully';
-        } else {
-            $inventory = new Inventory();
-            $message = 'Inventory created successfully';
-        }
+        $inventory->load(['product', 'supplier']);
 
-        $inventory->product_id  = $request->product_id;
-        $inventory->supplier_id = $request->supplier_id;
-        $inventory->quantity    = $request->quantity;
-        $inventory->made_at     = $request->made_at;
-        $inventory->expires_at  = $request->expires_at;
-
-        $inventory->save();
-
-        session()->flash('success', $message);
-        return response()->json(['result' => $inventory]);
+        return response()->json([
+            'result'  => true,
+            'message' => $request->input('id') ? 'Inventory updated successfully' : 'Inventory created successfully',
+            'inventory' => $inventory,
+        ]);
     }
 
+    /**
+     * Remove the specified inventory.
+     */
     public function delete($id) {
         $inventory = Inventory::find($id);
-        if ($inventory) {
-            $inventory->delete();
-        }
-        return back()->with('success', 'Inventory deleted successfully');
+        if ($inventory) $inventory->delete();
+
+        return response()->json([
+            'result'  => true,
+            'message' => 'Inventory deleted successfully',
+            'id'      => $id,
+        ]);
+    }
+
+    public function byProduct($productId) {
+        $inventories = Inventory::with('supplier')
+            ->where('product_id', $productId)
+            ->get();
+
+        return response()->json($inventories);
     }
 }

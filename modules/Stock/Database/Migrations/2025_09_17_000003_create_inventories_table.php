@@ -12,11 +12,13 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
+            $table->integer('price')->default(0);
             $table->integer('quantity')->default(0);
             $table->date('made_at')->nullable();
             $table->date('expires_at')->nullable();
             $table->string('batch')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // <-- add deleted_at column
         });
     }
 
