@@ -8,7 +8,7 @@
     <!-- Search + New -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <input type="text" id="site-search" placeholder="Search sites..." class="form-control rounded-pill w-50">
-        <button class="btn btn-primary ms-3" onclick="openNewSite()">
+        <button class="btn btn-primary rounded-pill ms-3" onclick="openNewSite()">
             <i class="bi bi-plus-lg"></i> New Site
         </button>
     </div>
@@ -68,7 +68,7 @@ function renderPage(page=1, search='') {
     const totalPages = Math.ceil(filtered.length / pageSize);
     const pagination = $('#pagination').empty();
     for(let i=1;i<=totalPages;i++){
-        const btn = $(`<span class="pagination-btn ${i===page?'active':''}">${i}</span>`);
+        const btn = $(`<span class="pagination-btn rounded-pill ${i===page?'active':''}">${i}</span>`);
         btn.on('click',()=>renderPage(i,search));
         pagination.append(btn);
     }

@@ -34,7 +34,7 @@ Route::prefix('world')->middleware(['web', 'auth'])->group(function () {
         Route::post('/upsert', [StateController::class, 'upsert'])->name('world.states.upsert');
         Route::delete('/{id}', [StateController::class, 'delete'])->name('world.states.delete');
         Route::get('/install', [StateController::class, 'install'])->name('world.states.install');
-        Route::post('/upsert', [StateController::class, 'upsert'])->name('world.sites.upsert');
+        Route::get('/search', [StateController::class, 'search'])->name('world.states.search');
     });
 
     Route::prefix('cities')->group(function () {

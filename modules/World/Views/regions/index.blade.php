@@ -69,7 +69,7 @@
         if (totalPages <= 1) return;
         for (let i = 1; i <= totalPages; i++) {
             pagination.append(`
-                <button class="btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-light'} mx-1"
+                <button class="btn btn-sm rounded-pill ${i === currentPage ? 'btn-primary' : 'btn-light'} mx-1"
                     onclick="goToPage(${i})">${i}</button>
             `);
         }

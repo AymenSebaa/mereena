@@ -164,7 +164,7 @@
             const pagination = $('#pagination');
             pagination.empty();
             for (let i = 1; i <= totalPages; i++) {
-                const btn = $(`<span class="pagination-btn ${i===page?'active':''}">${i}</span>`);
+                const btn = $(`<span class="pagination-btn rounded-pill ${i===page?'active':''}">${i}</span>`);
                 btn.on('click', () => renderPage(i, search));
                 pagination.append(btn);
             }
