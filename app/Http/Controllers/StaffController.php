@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Role;
-use App\Models\Hotel;
+use App\Models\Site;
 use App\Models\Zone;
 use App\Models\Country;
 use Illuminate\Http\Request;
@@ -15,28 +15,28 @@ class StaffController extends Controller {
         $user = $request->user();
         $profile = $user->profile;
 
-        $staffQuery = User::with(['profile.role', 'profile.hotel', 'profile.zone', 'profile.country'])
+        $staffQuery = User::with(['profile.role', 'profile.site', 'profile.zone', 'profile.country'])
             ->whereHas('profile', fn($q) => $q->where('role_id', '!=', 10)); // exclude Guests
 
         // Supervisor or Manager (role_id 3 or 6)
         if ($profile && in_array($profile->role_id, [3, 6]) && $profile->zone_id) {
-            // Get hotel IDs in this zone
-            $hotelIds = $profile->zone->hotels->pluck('id') ?? collect();
+            // Get site IDs in this zone
+            $siteIds = $profile->zone->sites->pluck('id') ?? collect();
 
-            // Only users assigned to those hotels, excluding Guests
-            $staffQuery->whereHas('profile', function ($q) use ($hotelIds) {
-                $q->whereIn('hotel_id', $hotelIds);
+            // Only users assigned to those sites, excluding Guests
+            $staffQuery->whereHas('profile', function ($q) use ($siteIds) {
+                $q->whereIn('site_id', $siteIds);
             });
         }
 
         $staff = $staffQuery->orderByDesc('id')->paginate(1200);
 
         $roles = Role::all();
-        $hotels = Hotel::orderBy('name')->get();
+        $sites = Site::orderBy('name')->get();
         $zones = Zone::orderBy('name')->get();
-        $countries = Country::orderBy('name_en')->get();
+        $countries = Country::orderBy('name')->get();
 
-        return view('staff.index', compact('staff', 'roles', 'hotels', 'zones', 'countries'));
+        return view('staff.index', compact('staff', 'roles', 'sites', 'zones', 'countries'));
     }
 
 
@@ -47,7 +47,7 @@ class StaffController extends Controller {
             'email'      => ['required', 'email', 'max:255', 'unique:users,email,' . $request->id],
             'role_id'    => ['required', 'exists:roles,id'],
             'country_id' => ['required', 'exists:countries,id'],
-            'hotel_id'   => ['nullable', 'exists:hotels,id'],
+            'site_id'   => ['nullable', 'exists:sites,id'],
             'zone_id'    => ['nullable', 'exists:zones,id'],
             'phone'      => ['nullable', 'string', 'max:20', 'unique:profiles,phone,' . optional(Profile::where('user_id', $request->id)->first())->id],
         ]);
@@ -67,16 +67,16 @@ class StaffController extends Controller {
         $profile->country_id = v($request->country_id);
         $profile->phone      = v($request->phone);
 
-        // Assign hotel or zone based on role
+        // Assign site or zone based on role
         $roleId = intval($request->role_id);
 
-        $profile->hotel_id = null;
+        $profile->site_id = null;
         $profile->zone_id  = null;
 
         if ($roleId === 3 || $roleId === 6) { // Supervisor => zone
             $profile->zone_id  = v($request->zone_id);
-        } elseif ($roleId === 4) { // Operator => hotel
-            $profile->hotel_id = v($request->hotel_id);
+        } elseif ($roleId === 4) { // Operator => site
+            $profile->site_id = v($request->site_id);
         }
 
         $profile->save();

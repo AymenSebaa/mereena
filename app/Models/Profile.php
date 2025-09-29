@@ -14,7 +14,7 @@ class Profile extends Model {
         'role_id', 
         'category',
         'country_id', 
-        'hotel_id',
+        'site_id',
         'zone_id',
         'phone',
         'lat',
@@ -33,7 +33,7 @@ class Profile extends Model {
         return $this->belongsTo(Country::class);
     }
 
-    public function hotel() {
+    public function site() {
         return $this->belongsTo(Hotel::class);
     }
 

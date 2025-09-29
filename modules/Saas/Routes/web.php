@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureOtpVerified;
 use Illuminate\Support\Facades\Route;
 use Modules\Saas\Http\Controllers\InstallController;
 use Modules\Saas\Http\Controllers\OrganizationController;
@@ -8,7 +9,7 @@ use Modules\Saas\Http\Controllers\PlanController;
 use Modules\Saas\Http\Controllers\SubscriptionController;
 use Modules\Saas\Http\Controllers\InvoiceController;
 
-Route::prefix('saas')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('saas')->middleware(['web', 'auth', EnsureOtpVerified::class])->group(function () {
     // Organizations
     Route::prefix('organizations')->group(function () {
         Route::get('/', [OrganizationController::class, 'index'])->name('saas.organizations.index');

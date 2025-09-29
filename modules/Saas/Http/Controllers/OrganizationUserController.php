@@ -23,6 +23,8 @@ class OrganizationUserController extends Controller {
 
         $orgUser = OrganizationUser::updateOrCreate(['id' => $id], $validated);
 
+        $orgUser->load(['organization', 'user']);
+
         return response()->json([
             'result' => true,
             'message' => $id ? 'Organization User updated successfully' : 'Organization User created successfully',

@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Middleware\EnsureOtpVerified;
 use Illuminate\Support\Facades\Route;
 use Modules\Stock\Http\Controllers\ProductController;
 use Modules\Stock\Http\Controllers\SupplierController;
 use Modules\Stock\Http\Controllers\InventoryController;
 use Modules\Stock\Http\Controllers\OrderController;
 
-Route::prefix('stock')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('stock')->middleware(['web', 'auth', EnsureOtpVerified::class])->group(function () {
     // Products
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('stock.products.index');

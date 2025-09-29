@@ -86,13 +86,13 @@
                             </select>
                         </div>
 
-                        <!-- Hotel -->
-                        <div class="col-md-8 d-none" id="hotel-wrapper">
-                            <label class="form-label">Hotel</label>
-                            <select class="form-select" name="hotel_id" id="staff-hotel">
-                                <option value="">-- Select Hotel --</option>
-                                @foreach ($hotels as $hotel)
-                                    <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
+                        <!-- Site -->
+                        <div class="col-md-8 d-none" id="site-wrapper">
+                            <label class="form-label">Site</label>
+                            <select class="form-select" name="site_id" id="staff-site">
+                                <option value="">-- Select Site --</option>
+                                @foreach ($sites as $site)
+                                    <option value="{{ $site->id }}">{{ $site->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -126,32 +126,32 @@
         document.addEventListener('DOMContentLoaded', function() {
             const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
 
-            const hotelWrapper = document.getElementById('hotel-wrapper');
+            const siteWrapper = document.getElementById('site-wrapper');
             const zoneWrapper = document.getElementById('zone-wrapper');
             const roleSelect = document.getElementById('staff-role');
 
-            function toggleHotelZone(roleId) {
+            function toggleSiteZone(roleId) {
                 // hide both by default
-                hotelWrapper.classList.add('d-none');
+                siteWrapper.classList.add('d-none');
                 zoneWrapper.classList.add('d-none');
 
                 // Show based on role
                 if (roleId == 3 || roleId == 6) { // Supervisor or Despatcher
                     zoneWrapper.classList.remove('d-none');
                 } else if (roleId == 4) { // Operator
-                    hotelWrapper.classList.remove('d-none');
+                    siteWrapper.classList.remove('d-none');
                 }
             }
 
             roleSelect.addEventListener('change', function() {
-                toggleHotelZone(this.value);
+                toggleSiteZone(this.value);
             });
 
             window.openStaffModal = function() {
                 const form = document.getElementById('staffForm');
                 form.reset();
                 document.getElementById('staff-id').value = '';
-                toggleHotelZone(roleSelect.value);
+                toggleSiteZone(roleSelect.value);
                 staffModal.show();
             };
 
@@ -171,9 +171,9 @@
                 document.getElementById('staff-phone').value = user.profile?.phone ?? '';
                 document.getElementById('staff-role').value = user.profile?.role_id ?? '';
                 document.getElementById('staff-country').value = user.profile?.country_id ?? '';
-                document.getElementById('staff-hotel').value = user.profile?.hotel_id ?? '';
+                document.getElementById('staff-site').value = user.profile?.site_id ?? '';
                 document.getElementById('staff-zone').value = user.profile?.zone_id ?? '';
-                toggleHotelZone(user.profile?.role_id);
+                toggleSiteZone(user.profile?.role_id);
                 staffModal.show();
             };
 
@@ -274,7 +274,7 @@
                             <span class="badge country-badge">
                                 <i class="bi bi-globe me-1"></i> ${_(user.profile?.country?.name_en ?? '-')}
                             </span>
-                            ${user.profile?.hotel ? `<span class="badge hotel-badge"><i class="bi bi-building me-1"></i> ${_(user.profile.hotel.name)}</span>` : ''}
+                            ${user.profile?.site ? `<span class="badge site-badge"><i class="bi bi-building me-1"></i> ${_(user.profile.site.name)}</span>` : ''}
                             ${user.profile?.zone ? `<span class="badge zone-badge"><i class="bi bi-geo-alt me-1"></i> ${_(user.profile.zone.name)}</span>` : ''}
                         </div>
 
@@ -336,7 +336,7 @@
                     lat,
                     lng,
                     role,
-                    hotel,
+                    site,
                     zone,
                     country
                 } = profile;
@@ -359,7 +359,7 @@
                             <div class='text-dark'>
                                 <strong>${_(user.name)}</strong><br>
                                 Role: ${_(role.name)}<br>
-                                Hotel: ${_(hotel?.name ?? zone?.name)}<br>
+                                Site: ${_(site?.name ?? zone?.name)}<br>
                                 Country: ${_(country.name)}
                             </div>`
                 });

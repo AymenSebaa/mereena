@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureOtpVerified;
 use Illuminate\Support\Facades\Route;
 use Modules\World\Http\Controllers\InstallController;
 use Modules\World\Http\Controllers\ContinentController;
@@ -8,7 +9,7 @@ use Modules\World\Http\Controllers\CountryController;
 use Modules\World\Http\Controllers\StateController;
 use Modules\World\Http\Controllers\CityController;
 
-Route::prefix('world')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('world')->middleware(['web', 'auth', EnsureOtpVerified::class])->group(function () {
     Route::prefix('continents')->group(function () {
         Route::get('/', [ContinentController::class, 'index'])->name('world.continents.index');
         Route::post('/upsert', [ContinentController::class, 'upsert'])->name('world.continents.upsert');

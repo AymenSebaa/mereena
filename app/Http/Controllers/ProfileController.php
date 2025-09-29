@@ -55,16 +55,16 @@ class ProfileController extends Controller {
         return Redirect::to('/');
     }
 
-    public function selectHotel(Request $request) {
-        $request->validate(['hotel_id' => 'required|exists:hotels,id']);
+    public function selectSite(Request $request) {
+        $request->validate(['site_id' => 'required|exists:sites,id']);
 
         $user = $request->user();
 
         $profile = Profile::firstOrCreate(['user_id' => $user->id]);
-        $profile->hotel_id = $request->hotel_id;
+        $profile->site_id = $request->site_id;
         $profile->save();
 
-        return redirect()->route('dashboard')->with('success', 'Hotel selected successfully!');
+        return redirect()->route('dashboard')->with('success', 'Site selected successfully!');
     }
 
     public function updateLocation(Request $request) {
