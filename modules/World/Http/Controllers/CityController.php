@@ -2,11 +2,6 @@
 
 namespace Modules\World\Http\Controllers;
 
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Exception;
-use Modules\World\Database\Seeders\CitySeeder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\World\Models\City;
@@ -48,43 +43,6 @@ class CityController extends Controller {
             'message' => 'City deleted successfully',
             'id' => $id,
         ]);
-    }
-
-    public function install() {
-        $module = 'World';
-        $table  = 'cities';
-        $migration  = "$table" . "_table";
-        $migration_path =  "modules/$module/Database/Migrations/$migration.php";
-
-        try {
-            // Run migration if table does not exist
-            if (!Schema::hasTable($table)) {
-                DB::table('migrations')->where('migration', 'like', $migration)->delete();
-
-                Artisan::call('migrate', [
-                    '--path' => $migration_path,
-                    '--force' => true,
-                ]);
-            }
-
-            if (!Schema::hasTable($table)) {
-                return response()->json(['status' => 'error', 'message' => "Migration failed: Table $table still does not exist"]);
-            }
-
-            if (City::count() > 0) {
-                return response()->json(['status' => 'info', 'message' => 'Cities already installed']);
-            }
-
-            Artisan::call('db:seed', [
-                '--class' => CitySeeder::class,
-                '--force' => true,
-            ]);
-
-
-            return response()->json(['status' => 'success', 'message' => 'Cities installed successfully']);
-        } catch (Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        }
     }
 
     public function search(Request $request) {

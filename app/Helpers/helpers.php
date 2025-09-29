@@ -1,7 +1,7 @@
 <?php
 
 function v($value) {
-    if (is_null($value) || $value === '') return null; 
+    if (is_null($value) || $value === '') return null;
     if (is_array($value)) return json_encode($value, JSON_UNESCAPED_UNICODE);
     // if (is_numeric($value)) return (int) $value; 
 
@@ -25,4 +25,24 @@ function formatDistance(float $meters): string {
         return round($meters) . ' m';
     }
     return round($meters / 1000, 1) . ' km';
+}
+
+function installModule($module, $table, $seeder) {
+    $migration  = "$table" . "_table";
+    $migration_path =  "modules/$module/Database/Migrations/$migration.php";
+    $seeder_class = "Modules\\$module\\Database\\Seeders\\$seeder";
+
+    try {
+        if (!Schema::hasTable($table)) {
+            DB::table('migrations')->where('migration', 'like', "%{$table}%")->delete();
+            Artisan::call('migrate', ['--path' => $migration_path, '--force' => true]);
+        }
+        if (!Schema::hasTable($table)) return response()->json(['status' => 'error', 'message' => "Migration failed for $table"]);
+        if (DB::table($table)->count() > 0) return response()->json(['status' => 'info', 'message' => "$table already seeded"]);
+
+        Artisan::call('db:seed', ['--class' => $seeder_class, '--force' => true]);
+        return response()->json(['status' => 'success', 'message' => "$table installed successfully"]);
+    } catch (Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
 }

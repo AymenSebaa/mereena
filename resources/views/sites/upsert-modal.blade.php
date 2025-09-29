@@ -73,12 +73,15 @@ $('#upsertSiteForm').on('submit', function(e){
     $(this).append('<input type="hidden" name="address" value="'+combinedAddress+'">');
 
     $.post("{{ route('sites.upsert') }}", $(this).serialize(), function(res){
-        if(res.status == 'success'){
+        if(res.result){
             siteModal.hide();
             fetchSites($('#site-search').val());
-            showToast(res.message, res.status);
-        } else showToast('Failed to save site', 'error');
-    }).fail(err=>showToast(err.responseJSON?.message ?? 'Validation error', 'error'));
+
+            showToast(res.message, 'success');
+        } 
+    }).fail(function(xhr) {
+        showToast(xhr.responseJSON?.message || "Save failed", "error");
+    });
 });
 </script>
 @endpush
