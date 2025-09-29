@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Mail;
 class BusController extends Controller {
     public function index(Request $request) {
         $data['buses'] = []; // $this->getUserQuery($request->user())->latest()->paginate(12);
-        $data['types'] = Type::where('name', 'Vehicules')->first()->subTypes;
+        $data['types'] = Type::where('name', 'Vehicules')->first()->subTypes ?? [];
 
         return view('buses.index', $data);
     }

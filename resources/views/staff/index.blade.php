@@ -180,7 +180,7 @@
             document.getElementById('staffForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const fd = new FormData(this);
-                fetch("{{ route('staff.upsert') }}", {
+                fetch("{{ oRoute('staff.upsert') }}", {
                         method: 'POST',
                         body: fd,
                         headers: {

@@ -43,7 +43,7 @@
 
         async function fetchReservations(search = '') {
             try {
-                const res = await fetch(`{{ route('reservations.live') }}?search=${encodeURIComponent(search)}`);
+                const res = await fetch(`{{ oRoute('reservations.live') }}?search=${encodeURIComponent(search)}`);
                 const data = await res.json();
                 reservationsData = data;
                 currentPage = 1;
@@ -144,7 +144,7 @@
         @if (in_array('reservations.approve', $permissions))
             async function approveReservation(id) {
                 try {
-                    const res = await fetch(`{{ route('reservations.approve', ':id') }}`.replace(':id', id), {
+                    const res = await fetch(`{{ oRoute('reservations.approve', ':id') }}`.replace(':id', id), {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'

@@ -56,7 +56,7 @@
     <div class="d-flex justify-content-around align-items-center w-100">
         @foreach ($bottomNavItems as $item)
             @if (in_array($item['permission'], $permissions) || $item['permission'] === 'dashboard')
-                <a href="{{ route($item['route']) }}"
+                <a href="{{ oRoute($item['route']) }}"
                     class="nav-item text-center text-decoration-none {{ request()->routeIs($item['pattern']) ? 'active' : '' }}">
                     <i class="bi {{ $item['icon'] }}"></i>
                     <small style="font-size: .7em" >{{ $item['label'] }}</small>

@@ -31,7 +31,7 @@
         let id = $("#delete_plan_id").val();
 
         $.ajax({
-            url: "{{ route('saas.plans.delete', ':id') }}".replace(':id', id),
+            url: "{{ oRoute('saas.plans.delete', ':id') }}".replace(':id', id),
             type: "DELETE",
             headers: {
                 "X-CSRF-TOKEN": "{{ csrf_token() }}"

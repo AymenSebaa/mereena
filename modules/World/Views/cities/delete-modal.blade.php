@@ -31,7 +31,7 @@
         let id = $("#delete_city_id").val();
 
         $.ajax({
-            url: "{{ route('world.cities.delete', ':id') }}".replace(':id', id),
+            url: "{{ oRoute('world.cities.delete', ':id') }}".replace(':id', id),
             type: "DELETE",
             headers: {
                 "X-CSRF-TOKEN": "{{ csrf_token() }}"

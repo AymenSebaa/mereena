@@ -109,7 +109,7 @@ document.getElementById('confirmImportBtn').addEventListener('click', async () =
     });
 
     // Send to server
-    const res = await fetch('{{ route("reservations.import") }}', {
+    const res = await fetch('{{ oRoute("reservations.import") }}', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',

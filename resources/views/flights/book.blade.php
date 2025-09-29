@@ -47,7 +47,7 @@
     <div class="step-content d-none" id="step-2">
         <h5 class="mb-3">Passenger Info</h5>
 
-        <form id="reserveForm" method="POST" action="{{ route('flights.reserve') }}">
+        <form id="reserveForm" method="POST" action="{{ oRoute('flights.reserve') }}">
             @csrf
             <input type="hidden" name="flight" id="selectedFlight">
 
@@ -204,7 +204,7 @@
 
     <script>
         function backToLogin() {
-            window.location.href = "{{ route('login') }}"
+            window.location.href = "{{ oRoute('login') }}"
         }
 
         // Toggle "Other" category input

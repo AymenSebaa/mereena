@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Task;
 use App\Models\Bus;
-use App\Models\Hotel;
-use App\Models\HotelZone;
+use App\Models\Site;
+use App\Models\SiteZone;
 use App\Models\User;
 use App\Models\Zone;
 use App\Services\GoogleMapsService;
@@ -34,7 +34,7 @@ class TaskController extends Controller {
             });
         }
 
-        $tasks = $query->with('hotel')->latest()->get();
+        $tasks = $query->with('site')->latest()->get();
         $buses = Bus::all()->keyBy('external_id');
 
         return response()->json([
@@ -94,15 +94,15 @@ class TaskController extends Controller {
             $this->notifyUsers($task);
         }
 
-        $hotel = Hotel::all()->sortBy(function ($hotel) use ($task) {
+        $site = Site::all()->sortBy(function ($site) use ($task) {
             return distance(
-                $hotel->lat,
-                $hotel->lng,
+                $site->lat,
+                $site->lng,
                 $task->pickup_address_lat,
                 $task->pickup_address_lng
             );
         })->first();
-        $task->hotel_id = $hotel->id;
+        $task->site_id = $site->id;
 
         // Fetch and save Google Directions
         $source = ['lat' => $task->pickup_address_lat, 'lng' => $task->pickup_address_lng];
@@ -120,15 +120,15 @@ class TaskController extends Controller {
 
         return response()->json([
             'status' => 1,
-            'task'   => $task->load(['hotel', 'bus']),
+            'task'   => $task->load(['site', 'bus']),
             'message' => 'Task saved successfully.'
         ]);
     }
 
     protected function notifyUsers($task) {
-        if (!$task->status || !$task->hotel_id || !$task->pickup_time_from) return;
+        if (!$task->status || !$task->site_id || !$task->pickup_time_from) return;
 
-        $hotel_id = $task->hotel_id;
+        $site_id = $task->site_id;
         $delay = Carbon::parse($task->pickup_time_from)->subMinutes(15);
 
         // Admin (1) & Manager (2) → get all
@@ -140,8 +140,8 @@ class TaskController extends Controller {
         // Supervisors (3) & Dispatchers (6) → by zone
         $zoneIds = [];
 
-        if ($hotel_id) {
-            $zoneIds = HotelZone::where('hotel_id', $hotel_id)->pluck('zone_id');
+        if ($site_id) {
+            $zoneIds = SiteZone::where('site_id', $site_id)->pluck('zone_id');
         }
 
         if ($zoneIds->isNotEmpty()) {
@@ -154,11 +154,11 @@ class TaskController extends Controller {
             }
         }
 
-        // Guests (10) → same hotel as operator
-        if ($hotel_id) {
-            $guests = User::whereHas('profile', function ($q) use ($hotel_id) {
+        // Guests (10) → same site as operator
+        if ($site_id) {
+            $guests = User::whereHas('profile', function ($q) use ($site_id) {
                 $q->where('role_id', 10)
-                    ->where('hotel_id', $hotel_id);
+                    ->where('site_id', $site_id);
             })->get();
 
             foreach ($guests as $user) {
@@ -176,7 +176,7 @@ class TaskController extends Controller {
 
         return response()->json([
             'status' => 1,
-            'task'   => $newTask->load(['hotel', 'bus']),
+            'task'   => $newTask->load(['site', 'bus']),
             'message' => 'Task duplicated successfully.'
         ]);
     }
@@ -207,11 +207,11 @@ class TaskController extends Controller {
             $count = 0;
 
             foreach ($tasks as $t) {
-                // Find nearest hotel to pickup location
-                $hotel = Hotel::all()->sortBy(function ($hotel) use ($t) {
+                // Find nearest site to pickup location
+                $site = Site::all()->sortBy(function ($site) use ($t) {
                     return distance(
-                        $hotel->lat,
-                        $hotel->lng,
+                        $site->lat,
+                        $site->lng,
                         $t['pickup_address_lat'],
                         $t['pickup_address_lng']
                     );
@@ -220,7 +220,7 @@ class TaskController extends Controller {
                 Task::updateOrCreate(
                     ['external_id' => v($t['id'])],
                     [
-                        'hotel_id'             => v($hotel?->id),
+                        'site_id'             => v($site?->id),
                         'device_id'            => v($t['device_id']),
                         'user_id'              => v($t['user_id']),
                         'title'                => v($t['title']),
@@ -250,16 +250,16 @@ class TaskController extends Controller {
     }
 
     public static function getUserQuery($user) {
-        $query = Task::with(['hotel', 'bus']); // eager load hotel and bus
+        $query = Task::with(['site', 'bus']); // eager load site and bus
         $profile = $user->profile ?? null;
 
         if ($profile && in_array($profile->role_id, [3, 4, 6, 10])) {
-            if ($profile->hotel_id) {
-                $query->where('hotel_id', $profile->hotel_id);
+            if ($profile->site_id) {
+                $query->where('site_id', $profile->site_id);
             } else if ($profile->zone_id) {
                 $zone = Zone::find($profile->zone_id);
-                $hotelIds = $zone?->hotels->pluck('id') ?? collect();
-                $query->whereIn('hotel_id', $hotelIds);
+                $siteIds = $zone?->sites->pluck('id') ?? collect();
+                $query->whereIn('site_id', $siteIds);
             } else {
                 $query->whereRaw('0=1');
             }

@@ -9,7 +9,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb glass-card p-3 mb-4">
             <li class="breadcrumb-item">
-                <a href="{{ route('zones.index') }}">Zones</a>
+                <a href="{{ oRoute('zones.index') }}">Zones</a>
             </li>
             <li class="breadcrumb-item active">{{ $zone->name }}</li>
         </ol>
@@ -197,7 +197,7 @@
     }
 
     function toggleHotel(hotelId, action) {
-        fetch(`{{ route('zones.index') }}/${zoneId}/hotel`, {
+        fetch(`{{ oRoute('zones.index') }}/${zoneId}/hotel`, {
             method: "POST",
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}",

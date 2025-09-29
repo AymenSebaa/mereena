@@ -147,10 +147,11 @@
     </div>
     <div class="position-relative d-flex justify-content-between align-items-center px-4">
         <div class="d-flex flex-column">
-            <span>
-                <strong class="text-light">{{ auth()->user()->profile->role->name }}</strong>
-                {{ auth()->user()->profile->category ?? '' }}
-            </span>
+            <strong class="text-light">{{ auth()->user()->organization?->name }}</strong>
+            <div>
+                <small class="text-light"><b>{{ auth()->user()->profile->role->name }}</b></small>
+                <span>{{ auth()->user()->profile->category ?? '' }}</span>
+            </div>
             <small class="text-gray">{{ auth()->user()->email }}</small>
         </div>
         <div class="d-flex align-items-center">
@@ -170,7 +171,7 @@
                 <div class="nav-item">
                     <a class="nav-link d-flex justify-content-between align-items-center px-4 py-3 text-white text-decoration-none
                         {{ request()->routeIs($item['pattern'] ?? $item['route']) ? 'active' : '' }}"
-                        href="{{ route($item['route']) }}">
+                        href="{{ oRoute($item['route']) }}">
                         <div>
                             <i class="{{ $item['icon'] }} me-3 fs-5"></i>
                             <span class="nav-text">{{ $item['text'] }}</span>
@@ -198,7 +199,7 @@
                     aria-expanded="{{ collect($module['menu']['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'true' : 'false' }}"
                     aria-controls="{{ $module['slug'] }}Submenu"
                 @elseif(isset($module['menu']['route']))
-                    href="{{ route($module['menu']['route']) }}"
+                    href="{{ oRoute($module['menu']['route']) }}"
                 @else
                     href="#" @endif>
                         <i class="bi bi-{{ $module['menu']['icon'] }} me-3 fs-5"></i>
@@ -218,7 +219,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none
                                     {{ request()->routeIs($child['route']) ? 'active' : '' }}"
-                                            href="{{ route($child['route']) }}">
+                                            href="{{ oRoute($child['route']) }}">
                                             <i class="bi bi-{{ $child['icon'] }} me-2"></i>
                                             <span class="nav-text">{{ $child['title'] }}</span>
                                         </a>
@@ -250,7 +251,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none
                                             {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                                            href="{{ route($item['route']) }}">
+                                            href="{{ oRoute($item['route']) }}">
                                             <i class="{{ $item['icon'] }} me-2"></i>
                                             <span class="nav-text">{{ $item['text'] }}</span>
                                         </a>
@@ -265,7 +266,7 @@
 
         {{-- Logout --}}
         <div class="nav-item">
-            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+            <form method="POST" action="{{ oRoute('logout') }}" class="d-inline">
                 @csrf
                 <button type="submit"
                     class="nav-link d-flex align-items-center px-4 py-3 text-white text-decoration-none border-0 bg-transparent w-100">
@@ -381,7 +382,7 @@
 
         // Fetch counts
         @if(false)
-        fetch("{{ route('sidebar.counts') }}")
+        fetch("{{ oRoute('sidebar.counts') }}")
             .then(res => res.json())
             .then(data => {
                 @if (in_array('tasks', $permissions))

@@ -129,7 +129,7 @@
                         <small>Type: ${_(z.type?.name ?? '-')} | Geofence: ${_(z.geofence ? 'Yes' : 'No')}</small>
                         <div class="mt-3 d-flex gap-2">
                             <a class="btn btn-sm btn-outline-primary"
-                               href="{{ route('zones.index') }}/${_(z.id)}/hotels">
+                               href="{{ oRoute('zones.index') }}/${_(z.id)}/hotels">
                                 <i class="bi bi-building"></i> 
                                 <small>${_(z.hotels_count ?? 0)}</small>
                             </a>
@@ -180,7 +180,7 @@
             e.preventDefault();
             const form = new FormData(this);
 
-            fetch("{{ route('zones.upsert') }}", {
+            fetch("{{ oRoute('zones.upsert') }}", {
                     method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -195,7 +195,7 @@
         });
 
         // -------------------- DELETE --------------------
-        const deleteUrlTemplate = "{{ route('zones.delete', ['id' => '__ID__']) }}";
+        const deleteUrlTemplate = "{{ oRoute('zones.delete', ['id' => '__ID__']) }}";
 
         function openDelete(id) {
             document.getElementById('deleteZoneForm').action = deleteUrlTemplate.replace('__ID__', id);

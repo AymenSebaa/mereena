@@ -25,7 +25,7 @@ $(function(){
     let timer = null;
 
     function fetchCities(term){
-        $.get("{{ route('world.cities.search') }}", { q: term }, function(data){
+        $.get("{{ oRoute('world.cities.search') }}", { q: term }, function(data){
             $cityList.empty();
             if(!data || data.length === 0){
                 $cityList.hide();

@@ -5,7 +5,7 @@
 @section('content')
     <div class="mobile-padding">
         <h4>Add New Staff</h4>
-        <form action="{{ route('staff.store') }}" method="POST" class="mt-3">
+        <form action="{{ oRoute('staff.store') }}" method="POST" class="mt-3">
             @csrf
             <div class="mb-3">
                 <label>Name</label>

@@ -3,7 +3,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-3 text-success small text-center" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
+    <form method="POST" action="{{ oRoute('login') }}" class="needs-validation" novalidate>
         @csrf
 
         <!-- Email -->
@@ -41,7 +41,7 @@
         <!-- Register link -->
         <div class="text-center mt-4">
             @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="text-decoration-none">
+                <a href="{{ oRoute('register') }}" class="text-decoration-none">
                     {{ __("Don't have an account? Register") }}
                 </a>
             @endif

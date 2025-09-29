@@ -123,7 +123,7 @@ document.querySelector('.btn-scan').onclick = () => {
                 };
 
                 // Preview / decrypt content
-                fetch("{{ route('scans.preview') }}", {
+                fetch("{{ oRoute('scans.preview') }}", {
                     method: 'POST',
                     headers: {'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}'},
                     body: JSON.stringify({content: qrCodeMessage})
@@ -169,7 +169,7 @@ submitScanBtn.onclick = () => {
     const radios = document.querySelectorAll('input[name="busStatus"]');
     radios.forEach(r => { if(r.checked) extra = r.value; });
 
-    fetch("{{ route('scans.store') }}", {
+    fetch("{{ oRoute('scans.store') }}", {
         method:'POST',
         headers: {'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}'},
         body: JSON.stringify({...currentScanPayload, extra})

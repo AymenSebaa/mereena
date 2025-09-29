@@ -41,7 +41,7 @@
                                 data-scans='@json($supervisor['scans'])'>
                                 <i class="bi bi-caret-down-fill"></i>
                             </button>
-                            <a href="{{ route('reports.supervisor-zone') }}?start={{ $start }}&end={{ $end }}&supervisor_id={{ $supervisor['supervisor_id'] }}"
+                            <a href="{{ oRoute('reports.supervisor-zone') }}?start={{ $start }}&end={{ $end }}&supervisor_id={{ $supervisor['supervisor_id'] }}"
                                 class="btn btn-sm btn-secondary" target="_blank">
                                 <i class="bi bi-printer"></i>
                             </a>

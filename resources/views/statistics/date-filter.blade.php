@@ -16,7 +16,7 @@
     </form>
 
     <div class="">
-        <a href="{{ route('reports.operator-bus') }}?start={{ $start }}&end={{ $end }}" target="_blank"
+        <a href="{{ oRoute('reports.operator-bus') }}?start={{ $start }}&end={{ $end }}" target="_blank"
             class="btn btn-secondary">
             <i class="bi bi-printer"></i> Print All
         </a>

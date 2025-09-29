@@ -62,7 +62,7 @@
         $("#saveBtnText").text("Saving...");
         $("#saveBtnSpinner").removeClass("d-none");
 
-        $.post("{{ route('world.regions.upsert') }}", formData)
+        $.post("{{ oRoute('world.regions.upsert') }}", formData)
             .done(function(data) {
                 if (data.result) {
                     let r = data.region;

@@ -1,6 +1,6 @@
 <x-guest-layout>
 
-    <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate>
+    <form method="POST" action="{{ oRoute('register') }}" class="needs-validation" novalidate>
         @csrf
 
         <!-- Name -->
@@ -45,7 +45,7 @@
 
         <!-- Already registered -->
         <div class="text-center mt-4">
-            <a href="{{ route('login') }}" class="text-decoration-none">
+            <a href="{{ oRoute('login') }}" class="text-decoration-none">
                 {{ __('Already registered?') }}
             </a>
         </div>

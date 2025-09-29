@@ -118,7 +118,7 @@
         }
 
         const pushPublicKey = `{{ env('PUSH_PUBLIC_KEY') }}`;
-        const pushURL = `{{ route('push') }}`;
+        const pushURL = `{{ oRoute('push') }}`;
         const csrf = '{{ csrf_token() }}';
 
         // Theme toggle functionality

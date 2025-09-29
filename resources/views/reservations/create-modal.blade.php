@@ -77,7 +77,7 @@
                 <!-- Step 3 (Confirmation) -->
                 <div class="step-content d-none" id="step-3">
                     <h5 class="mb-3">Confirmation</h5>
-                    <form id="reserveForm" method="POST" action="{{ route('reservations.reserve') }}">
+                    <form id="reserveForm" method="POST" action="{{ oRoute('reservations.reserve') }}">
                         @csrf
                         <input type="hidden" name="flight" id="selectedFlight">
                         <input type="hidden" name="pickup_time" id="hiddenPickupTime">

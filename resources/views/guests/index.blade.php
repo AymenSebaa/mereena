@@ -105,7 +105,7 @@
 
         async function fetchGuests(search = '') {
             try {
-                const res = await fetch(`{{ route('guests.live') }}?search=${encodeURIComponent(search)}`);
+                const res = await fetch(`{{ oRoute('guests.live') }}?search=${encodeURIComponent(search)}`);
                 guestsData = await res.json();
                 currentPage = 1;
                 renderGuests();

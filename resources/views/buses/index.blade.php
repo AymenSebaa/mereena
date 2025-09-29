@@ -92,7 +92,7 @@
             e.preventDefault();
             const formData = $(this).serialize();
 
-            $.post("{{ route('buses.upsert') }}", formData, function(res) {
+            $.post("{{ oRoute('buses.upsert') }}", formData, function(res) {
                 if (res.success) {
                     $('#upsertBusModal').modal('hide');
                     fetchBuses($('#bus-search').val()); // refresh list
@@ -284,7 +284,7 @@
 
         // Fetch buses
         function fetchBuses(search = '') {
-            $.get("{{ route('buses.live') }}", {
+            $.get("{{ oRoute('buses.live') }}", {
                 search
             }, function(data) {
                 allBuses = data;
@@ -305,7 +305,7 @@
                     return $(this).val();
                 }).get();
 
-                let url = "{{ route('buses.qrcodes') }}";
+                let url = "{{ oRoute('buses.qrcodes') }}";
 
                 if (selected.length > 0) {
                     // Generate only selected

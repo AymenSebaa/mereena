@@ -84,7 +84,7 @@
             lng
         };
 
-        fetch("{{ route('buses.scan') }}", {
+        fetch("{{ oRoute('buses.scan') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

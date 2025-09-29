@@ -82,7 +82,7 @@ function renderPage(page=1, search='') {
 
 // Fetch sites
 function fetchSites(search='') {
-    $.get("{{ route('sites.index') }}", {search}, function(data){
+    $.get("{{ oRoute('sites.index') }}", {search}, function(data){
         allSites = data;
         renderPage(1, search);
     });

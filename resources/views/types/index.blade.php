@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb glass-card p-3 mb-4">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('types.index') }}">Types</a>
+                    <a href="{{ oRoute('types.index') }}">Types</a>
                 </li>
 
                 @if ($type)
@@ -26,7 +26,7 @@
                     @foreach ($ancestors as $ancestor)
                         <li class="breadcrumb-item {{ $loop->last ? 'active' : '' }}">
                             @if (!$loop->last)
-                                <a href="{{ route('types.index', $ancestor->id) }}">{{ $ancestor->name }}</a>
+                                <a href="{{ oRoute('types.index', $ancestor->id) }}">{{ $ancestor->name }}</a>
                             @else
                                 {{ $ancestor->name }}
                             @endif
@@ -179,7 +179,7 @@
 
                         <div class="mt-3 d-flex gap-2">
                             <a class="btn btn-sm btn-outline-primary"
-                               href="{{ route('types.index') }}/${_(type.id)}">
+                               href="{{ oRoute('types.index') }}/${_(type.id)}">
                                 <i class="bi bi-stack"></i> 
                                 <small>${_(type.sub_types_count ?? 0)}</small>
                             </a>
@@ -222,7 +222,7 @@
             e.preventDefault();
             let formData = new FormData(this);
 
-            fetch("{{ route('types.upsert') }}", {
+            fetch("{{ oRoute('types.upsert') }}", {
                     method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"

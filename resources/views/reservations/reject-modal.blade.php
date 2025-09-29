@@ -30,7 +30,7 @@
               const note = document.getElementById('rejectReason').value;
 
               try {
-                  const res = await fetch(`{{ route('reservations.reject', ':id') }}`.replace(':id', id), {
+                  const res = await fetch(`{{ oRoute('reservations.reject', ':id') }}`.replace(':id', id), {
                       method: 'POST',
                       headers: {
                           'Content-Type': 'application/json',

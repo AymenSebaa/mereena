@@ -82,7 +82,7 @@
         $("#saveBtnText").text("Saving...");
         $("#saveBtnSpinner").removeClass("d-none");
 
-        $.post("{{ route('stock.inventories.upsert') }}", formData)
+        $.post("{{ oRoute('stock.inventories.upsert') }}", formData)
             .done(function(data) {
                 if (data.result) {
                     let inv = data.inventory;

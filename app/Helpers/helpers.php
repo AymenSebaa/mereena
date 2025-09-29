@@ -46,3 +46,11 @@ function installModule($module, $table, $seeder) {
         return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
     }
 }
+
+function oRoute($name, $parameters = [], $absolute = true) {
+    $slug = auth()->user()?->organization?->slug ?? 'admin';
+    if (!is_array($parameters)) $parameters = [$parameters];
+    $parameters = array_merge(['organization_slug' => $slug], $parameters);
+
+    return route($name, $parameters, $absolute);
+}

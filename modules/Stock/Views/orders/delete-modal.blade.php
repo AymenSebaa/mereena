@@ -33,7 +33,7 @@
         let id = $("#delete_order_id").val();
 
         $.ajax({
-            url: "{{ route('stock.orders.delete', ':id') }}".replace(':id', id),
+            url: "{{ oRoute('stock.orders.delete', ':id') }}".replace(':id', id),
             type: "DELETE",
             headers: {
                 "X-CSRF-TOKEN": "{{ csrf_token() }}"

@@ -146,7 +146,7 @@
         inventorySelect.innerHTML = '<option value="">Loading...</option>';
 
         // Use route with placeholder and replace(':id', productId)
-        const url = "{{ route('stock.inventories.byProduct', ':id') }}".replace(':id', encodeURIComponent(productId));
+        const url = "{{ oRoute('stock.inventories.byProduct', ':id') }}".replace(':id', encodeURIComponent(productId));
 
         fetch(url, {
                 headers: {
@@ -223,7 +223,7 @@
         $("#saveOrderBtn")?.prop("disabled", true);
 
         $.ajax({
-            url: "{{ route('stock.orders.upsert') }}",
+            url: "{{ oRoute('stock.orders.upsert') }}",
             type: "POST",
             data: form.serialize(),
             headers: {

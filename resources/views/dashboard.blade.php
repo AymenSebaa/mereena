@@ -119,7 +119,7 @@
             <div class="overlay-card">
                 <div class="card-title">
                     <span>Upcoming Departures</span>
-                    <a href="{{ route('tasks.index') }}" class="view-all">View All</a>
+                    <a href="{{ oRoute('tasks.index') }}" class="view-all">View All</a>
                 </div>
 
                 @if (isset($recentTasks) && $recentTasks->count())
@@ -210,7 +210,7 @@
             <div class="overlay-card">
                 <div class="card-title">
                     <span>Alerts &amp; Notifications</span>
-                    <a href="{{ route('tasks.index') }}" class="view-all">View All</a>
+                    <a href="{{ oRoute('tasks.index') }}" class="view-all">View All</a>
                 </div>
 
                 <div class="departure-item">
@@ -254,7 +254,7 @@
             <div class="overlay-card">
                 <div class="card-title">
                     <span>Events & Activities</span>
-                    <a href="{{ route('events.index') }}" class="view-all">View All</a>
+                    <a href="{{ oRoute('events.index') }}" class="view-all">View All</a>
                 </div>
 
                 <div class="departure-item">

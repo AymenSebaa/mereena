@@ -82,7 +82,7 @@
         e.preventDefault();
         const formData = $(this).serialize();
 
-        $.post("{{ route('companies.upsert') }}", formData, function(res) {
+        $.post("{{ oRoute('companies.upsert') }}", formData, function(res) {
             if (res.success) {
                 $('#upsertCompanyModal').modal('hide');
                 fetchCompanies($('#company-search').val());
@@ -169,7 +169,7 @@
 
     // Fetch companies
     function fetchCompanies(search = '') {
-        $.get("{{ route('companies.live') }}", { search }, function(data) {
+        $.get("{{ oRoute('companies.live') }}", { search }, function(data) {
             allCompanies = data;
             renderPage(1, search);
         });

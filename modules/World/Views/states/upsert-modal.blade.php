@@ -70,7 +70,7 @@
         $("#saveBtn").prop("disabled", true);
         $("#saveBtnSpinner").removeClass("d-none");
 
-        $.post("{{ route('world.states.upsert') }}", formData)
+        $.post("{{ oRoute('world.states.upsert') }}", formData)
             .done(function(data) {
                 if (data.result) {
                     let s = data.state;

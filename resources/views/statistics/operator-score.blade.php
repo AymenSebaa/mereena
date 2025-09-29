@@ -43,7 +43,7 @@
                                 <button class="btn btn-sm btn-primary details-btn" type="button"
                                     data-scans='@json($operator['scans'])'> <i class="bi bi-caret-down-fill"></i>
                                 </button>
-                                <a href="{{ route('reports.operator-bus') }}?start={{ $start }}&end={{ $end }}&operator_id={{ $operator['operator_id'] }}"
+                                <a href="{{ oRoute('reports.operator-bus') }}?start={{ $start }}&end={{ $end }}&operator_id={{ $operator['operator_id'] }}"
                                     class="btn btn-sm btn-secondary" target="_blank"> <i class="bi bi-printer"></i> </a>
                             </td>
                         </tr>

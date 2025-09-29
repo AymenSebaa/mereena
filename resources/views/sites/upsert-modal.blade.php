@@ -72,7 +72,7 @@ $('#upsertSiteForm').on('submit', function(e){
     const combinedAddress = mergeAddress();
     $(this).append('<input type="hidden" name="address" value="'+combinedAddress+'">');
 
-    $.post("{{ route('sites.upsert') }}", $(this).serialize(), function(res){
+    $.post("{{ oRoute('sites.upsert') }}", $(this).serialize(), function(res){
         if(res.result){
             siteModal.hide();
             fetchSites($('#site-search').val());

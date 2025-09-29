@@ -203,7 +203,7 @@
 
         // Fetch scans with search + date filter
         function fetchScans(search = '') {
-            $.get("{{ route('scans.live') }}", {
+            $.get("{{ oRoute('scans.live') }}", {
                 search,
                 from: $('#from-date').val(),
                 to: $('#to-date').val()

@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         lng: lng ? parseFloat(lng) : null
                     };
 
-                    fetch("{{ route('scans.preview') }}", {
+                    fetch("{{ oRoute('scans.preview') }}", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json','X-CSRF-TOKEN': '{{ csrf_token() }}' },
                         body: JSON.stringify({ content: qrCodeMessage })
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (extra === 'newDeparture' && !isDepartureFlow) {
             isDepartureFlow = true;
 
-            fetch("{{ route('buses.decryptQr') }}", {
+            fetch("{{ oRoute('buses.decryptQr') }}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 body: JSON.stringify({ content: currentPayload.content })
@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const destLat = destinationSelect.options[destinationSelect.selectedIndex].dataset.lat;
             const destLng = destinationSelect.options[destinationSelect.selectedIndex].dataset.lng;
 
-            fetch("{{ route('tasks.upsert') }}", {
+            fetch("{{ oRoute('tasks.upsert') }}", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 body: JSON.stringify({
@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // === Default scan save ===
-        fetch("{{ route('scans.store') }}", {
+        fetch("{{ oRoute('scans.store') }}", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             body: JSON.stringify({ ...currentPayload, extra })

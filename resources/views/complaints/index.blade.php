@@ -178,7 +178,7 @@
     <script>
         // ---- Edit ----
         function openEdit(id) {
-            fetch(`{{ route('complaints.index') }}/${id}`)
+            fetch(`{{ oRoute('complaints.index') }}/${id}`)
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('complaint_id').value = data.id;
@@ -195,7 +195,7 @@
             e.preventDefault();
             let formData = new FormData(this);
 
-            fetch("{{ route('complaints.upsert') }}", {
+            fetch("{{ oRoute('complaints.upsert') }}", {
                     method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"

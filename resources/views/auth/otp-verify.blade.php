@@ -9,7 +9,7 @@
             <button id="notification-close" class="btn-close btn-close-white"></button>
         </div>
 
-        <form method="POST" action="{{ route('otp.verify.submit') }}" id="otpForm">
+        <form method="POST" action="{{ oRoute('otp.verify.submit') }}" id="otpForm">
             @csrf
             <div class="d-flex justify-content-center gap-2 mb-4">
                 @for ($i = 1; $i <= 6; $i++)
@@ -26,7 +26,7 @@
 
     <script>
         function logoutAndRefresh() {
-            fetch("{{ route('logout') }}", {
+            fetch("{{ oRoute('logout') }}", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
@@ -87,7 +87,7 @@
 
         async function fetchRemaining() {
             try {
-                const res = await fetch("{{ route('otp.remaining') }}");
+                const res = await fetch("{{ oRoute('otp.remaining') }}");
                 const data = await res.json();
 
                 const now = Math.floor(Date.now() / 1000);
@@ -138,7 +138,7 @@
             resendBtn.disabled = true;
             resendBtn.textContent = 'Sending...';
             try {
-                const res = await fetch("{{ route('otp.resend') }}", {
+                const res = await fetch("{{ oRoute('otp.resend') }}", {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}",

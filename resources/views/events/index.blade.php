@@ -91,7 +91,7 @@
     const perPage = 9;
 
     async function fetchEvents(search = '') {
-        const res = await fetch(`{{ route('events.live') }}?search=${_(search)}`);
+        const res = await fetch(`{{ oRoute('events.live') }}?search=${_(search)}`);
         eventsData = await res.json();
         renderEvents();
         renderPagination();

@@ -13,6 +13,6 @@
         <p><strong>Hotel:</strong> {{ $event['hotel']['name'] }} ({{ $event['hotel']['address'] }})</p>
     @endif
 
-    <a href="{{ route('events.index') }}" class="btn btn-secondary">Back</a>
+    <a href="{{ oRoute('events.index') }}" class="btn btn-secondary">Back</a>
 </div>
 @endsection

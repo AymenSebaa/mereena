@@ -19,7 +19,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <input type="text" id="searchInput" class="form-control"
-                placeholder="Search by title, hotel, bus, pickup or delivery address...">
+                placeholder="Search by title, site, bus, pickup or delivery address...">
             @if (in_array(auth()->user()->profile->role_id, [1, 2, 3, 4, 6]))
                 <button id="newTaskBtn" class="btn btn-primary w-50 m-3" data-bs-toggle="modal"
                     data-bs-target="#upsertTaskModal">
@@ -92,10 +92,10 @@
 
                                 <hr>
 
-                                <!-- Pickup Hotel -->
+                                <!-- Pickup Site -->
                                 <div class="col-md-8">
                                     <label class="form-label">Source</label>
-                                    <input type="text" id="pickup_hotel" class="form-control"
+                                    <input type="text" id="pickup_site" class="form-control"
                                         placeholder="Type name of Source..." required>
                                     <input type="hidden" name="pickup_address" id="pickup_address">
                                     <input type="hidden" name="pickup_address_lat" id="pickup_lat">
@@ -106,10 +106,10 @@
                                     <input type="datetime-local" name="pickup_time_from" class="form-control">
                                 </div>
 
-                                <!-- Delivery Hotel -->
+                                <!-- Delivery Site -->
                                 <div class="col-md-8">
                                     <label class="form-label">Destination</label>
-                                    <input type="text" id="delivery_hotel" class="form-control"
+                                    <input type="text" id="delivery_site" class="form-control"
                                         placeholder="Type name of Destination..." required>
                                     <input type="hidden" name="delivery_address" id="delivery_address">
                                     <input type="hidden" name="delivery_address_lat" id="delivery_lat">
@@ -196,7 +196,7 @@
 
         // ---- Bus Autocomplete ----
         let buses = [];
-        $.get("{{ route('buses.list') }}", function(data) {
+        $.get("{{ oRoute('buses.list') }}", function(data) {
             buses = data.map(h => ({
                 external_id: h.external_id,
                 label: h.name,
@@ -214,10 +214,10 @@
             });
         });
 
-        // ---- Hotel Autocomplete ----
-        let hotels = [];
-        $.get("{{ route('hotels.list') }}", function(data) {
-            hotels = data.map(h => ({
+        // ---- Site Autocomplete ----
+        let sites = [];
+        $.get("{{ oRoute('sites.index') }}", function(data) {
+            sites = data.map(h => ({
                 label: h.name,
                 value: h.name,
                 address: h.name,
@@ -225,8 +225,8 @@
                 lng: h.lng
             }));
 
-            $("#pickup_hotel").autocomplete({
-                source: hotels,
+            $("#pickup_site").autocomplete({
+                source: sites,
                 select: function(event, ui) {
                     $("#pickup_address").val(ui.item.address);
                     $("#pickup_lat").val(ui.item.lat);
@@ -234,8 +234,8 @@
                 }
             });
 
-            $("#delivery_hotel").autocomplete({
-                source: hotels,
+            $("#delivery_site").autocomplete({
+                source: sites,
                 select: function(event, ui) {
                     $("#delivery_address").val(ui.item.address);
                     $("#delivery_lat").val(ui.item.lat);
@@ -263,7 +263,7 @@
             if (e.target.closest('.duplicate-task')) {
                 let id = e.target.closest('.duplicate-task').dataset.id;
 
-                fetch("{{ route('tasks.duplicate', ':id') }}".replace(':id', id), {
+                fetch("{{ oRoute('tasks.duplicate', ':id') }}".replace(':id', id), {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -300,11 +300,11 @@
                 document.getElementById('bus_id').value = task.bus?.name ?? '';
                 document.querySelector('#upsertTaskForm [name="status"]').value = task.status ?? '0';
                 document.getElementById('device_id').value = task.device_id ?? '';
-                document.getElementById('pickup_hotel').value = task.pickup_address ?? '';
+                document.getElementById('pickup_site').value = task.pickup_address ?? '';
                 document.getElementById('pickup_address').value = task.pickup_address ?? '';
                 document.getElementById('pickup_lat').value = task.pickup_address_lat ?? '';
                 document.getElementById('pickup_lng').value = task.pickup_address_lng ?? '';
-                document.getElementById('delivery_hotel').value = task.delivery_address ?? '';
+                document.getElementById('delivery_site').value = task.delivery_address ?? '';
                 document.getElementById('delivery_address').value = task.delivery_address ?? '';
                 document.getElementById('delivery_lat').value = task.delivery_address_lat ?? '';
                 document.getElementById('delivery_lng').value = task.delivery_address_lng ?? '';
@@ -333,7 +333,7 @@
             e.preventDefault();
             const id = document.getElementById('delete_task_id').value;
 
-            fetch("{{ route('tasks.delete', ':id') }}".replace(':id', id), {
+            fetch("{{ oRoute('tasks.delete', ':id') }}".replace(':id', id), {
                     method: "DELETE",
                     headers: {
                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
@@ -366,7 +366,7 @@
             e.preventDefault();
             const formData = new FormData(this);
 
-            fetch("{{ route('tasks.upsert') }}", {
+            fetch("{{ oRoute('tasks.upsert') }}", {
                     method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -413,7 +413,7 @@
 
         async function fetchTasks(search = '') {
             try {
-                const res = await fetch(`{{ route('tasks.live') }}?search=${encodeURIComponent(search)}`);
+                const res = await fetch(`{{ oRoute('tasks.live') }}?search=${encodeURIComponent(search)}`);
                 let json = await res.json();
                 tasksData = json.tasks || [];
                 currentPage = 1;
@@ -505,7 +505,7 @@
                         </div>
                         <div class="task-header d-flex justify-content-between align-items-start">
                             <div class="task-meta mb-2" style="font-size:14px;">
-                                <p class="mb-1"><i class="bi bi-building me-1"></i> ${_(task.hotel?.name ?? '-')}</p>
+                                <p class="mb-1"><i class="bi bi-building me-1"></i> ${_(task.site?.name ?? '-')}</p>
                                 <p class="mb-1"><i class="bi bi-bus-front me-1"></i> ${_(task.bus?.name ?? task.device_id ?? '-')}</p>
                             </div>
                             <div class="task-status ${status.class}">${_(status.label)}</div>

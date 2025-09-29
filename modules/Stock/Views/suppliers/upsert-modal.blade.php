@@ -50,7 +50,7 @@
         e.preventDefault();
         let formData = new FormData(this);
 
-        fetch("{{ route('stock.suppliers.upsert') }}", {
+        fetch("{{ oRoute('stock.suppliers.upsert') }}", {
                 method: "POST",
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"

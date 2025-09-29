@@ -18,7 +18,7 @@
                         localStorage.setItem("user_lng", lng);
 
                         // Send to Laravel via fetch
-                        fetch("{{ route('profile.updateLocation') }}", {
+                        fetch("{{ oRoute('profile.updateLocation') }}", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",

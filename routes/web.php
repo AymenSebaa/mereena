@@ -43,7 +43,7 @@ Route::middleware(['auth'])->prefix('otp')->group(function () {
 
 // Protected routes (require auth + OTP verification)
 // Route::middleware(['auth' /*, 'otp.verified'*/ ])->group(function () {
-Route::middleware(['auth', EnsureOtpVerified::class])->group(function () {
+Route::middleware(['auth', EnsureOtpVerified::class])->prefix('{organization_slug?}')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

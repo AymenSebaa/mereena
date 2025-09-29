@@ -91,7 +91,7 @@ $("#upsertProductForm").on("submit", function(e){
     $("#uploadProgress").css("width","0%").text("0%");
 
     $.ajax({
-        url: "{{ route('stock.products.upsert') }}",
+        url: "{{ oRoute('stock.products.upsert') }}",
         type: "POST",
         data: formData,
         contentType: false,

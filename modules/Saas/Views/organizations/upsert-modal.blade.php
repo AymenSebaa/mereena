@@ -68,7 +68,7 @@
         $("#saveBtnText").text("Saving...");
         $("#saveBtnSpinner").removeClass("d-none");
 
-        $.post("{{ route('saas.organizations.upsert') }}", formData)
+        $.post("{{ oRoute('saas.organizations.upsert') }}", formData)
             .done(function(data) {
                 if (data.result) {
                     let o = data.data;

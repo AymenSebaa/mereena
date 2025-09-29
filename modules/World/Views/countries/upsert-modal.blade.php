@@ -93,7 +93,7 @@
         $("#saveBtnText").text("Saving...");
         $("#saveBtnSpinner").removeClass("d-none");
 
-        $.post("{{ route('world.countries.upsert') }}", formData)
+        $.post("{{ oRoute('world.countries.upsert') }}", formData)
             .done(function(data) {
                 if (data.result) {
                     let c = data.country;

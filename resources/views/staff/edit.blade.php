@@ -5,7 +5,7 @@
 @section('content')
 <div class="mobile-padding">
     <h4>Edit Staff</h4>
-    <form action="{{ route('staff.update', $staff) }}" method="POST" class="mt-3">
+    <form action="{{ oRoute('staff.update', $staff) }}" method="POST" class="mt-3">
         @csrf
         @method('PUT')
         <div class="mb-3">

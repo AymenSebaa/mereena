@@ -32,7 +32,7 @@
         e.preventDefault();
         let id = document.getElementById('delete_site_id').value;
 
-        fetch("{{ route('sites.delete', ':id') }}".replace(':id', id), {
+        fetch("{{ oRoute('sites.delete', ':id') }}".replace(':id', id), {
                 method: "DELETE",
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"

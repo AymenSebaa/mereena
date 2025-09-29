@@ -202,7 +202,7 @@
 
         // Fetch hotels from backend
         function fetchHotels(search = '') {
-            $.get("{{ route('hotels.live') }}", {
+            $.get("{{ oRoute('hotels.live') }}", {
                 search
             }, function(data) {
                 allHotels = data;
@@ -219,7 +219,7 @@
         @if (!in_array(auth()->user()->profile->role_id, [3, 4, 10]))
             // Bulk QR
             $('#bulk-qr-btn').on('click', function() {
-                window.open("{{ route('hotels.qrcodes') }}", '_blank');
+                window.open("{{ oRoute('hotels.qrcodes') }}", '_blank');
             });
         @endif
 

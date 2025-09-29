@@ -6,5 +6,5 @@
     <p>Coordinates: {{ $hotel->lat }}, {{ $hotel->lng }}</p>
     <p>Stars: ⭐ {{ $hotel->stars }}</p>
 
-    <a href="{{ route('hotels.index') }}">Back to hotels</a>
+    <a href="{{ oRoute('hotels.index') }}">Back to hotels</a>
 @endsection
