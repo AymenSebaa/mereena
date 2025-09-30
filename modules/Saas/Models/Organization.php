@@ -2,11 +2,14 @@
 
 namespace Modules\Saas\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Organization as BaseOrganization;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Organization extends Model {
+class Organization extends BaseOrganization {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'slug',
@@ -19,11 +22,6 @@ class Organization extends Model {
     protected $casts = [
         'settings' => 'array',
     ];
-
-    // Relations
-    public function users(): HasMany {
-        return $this->hasMany(OrganizationUser::class);
-    }
 
     public function subscriptions(): HasMany {
         return $this->hasMany(Subscription::class);

@@ -2,40 +2,27 @@
 
 namespace Modules\Saas\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\BaseCrudController;
 use Modules\Saas\Models\Organization;
 
-class OrganizationController extends Controller {
-    public function index() {
-        $organizations = Organization::all();
-        return view('saas::organizations.index', compact('organizations'));
-    }
+class OrganizationController extends BaseCrudController {
+    protected string $modelClass = Organization::class;
+    protected string $viewPrefix = 'saas::organizations';
+    protected array $searchable = ['name', 'slug', 'email', 'phone', 'address'];
+    protected array $orderBy = ['name' => 'asc'];
 
-    public function upsert(Request $request) {
-        $id = $request->id;
-
-        $validated = $request->validate([
+    protected function rules(): array {
+        $id = request()->id; // grab ID for unique validation
+        return [
             'name'    => 'required|string|max:255',
             'slug'    => 'nullable|string|max:255|unique:organizations,slug,' . $id,
             'email'   => 'nullable|email|max:255',
             'phone'   => 'nullable|string|max:50',
             'address' => 'nullable|string|max:500',
-        ]);
-
-        $organization = Organization::updateOrCreate(['id' => $id], $validated);
-
-        return response()->json([
-            'result' => true,
-            'message' => $id ? 'Organization updated successfully' : 'Organization created successfully',
-            'data' => $organization,
-        ]);
+        ];
     }
 
-    public function delete($id) {
-        if ($org = Organization::find($id)) $org->delete();
-
-        return response()->json(['result' => true, 'message' => 'Organization deleted']);
+    protected function label(): string {
+        return 'Organization';
     }
-
 }

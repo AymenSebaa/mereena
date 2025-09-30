@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('interval')->default('monthly'); // monthly, yearly
             $table->json('features')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

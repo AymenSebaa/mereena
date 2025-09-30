@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->date('ends_at')->nullable();
             $table->string('status')->default('active'); // active, expired, canceled
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

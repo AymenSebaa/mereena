@@ -11,11 +11,6 @@ return [
         'icon'     => 'boxes',
         'children' => [
             [
-                'title' => 'Orders',
-                'icon'  => 'receipt',
-                'route' => 'stock.orders.index',
-            ],
-            [
                 'title' => 'Inventory',
                 'icon'  => 'dropbox',
                 'route' => 'stock.inventories.index',
@@ -24,11 +19,6 @@ return [
                 'title' => 'Products',
                 'icon'  => 'box-seam',
                 'route' => 'stock.products.index',
-            ],
-            [
-                'title' => 'Suppliers',
-                'icon'  => 'truck',
-                'route' => 'stock.suppliers.index',
             ],
         ],
     ],

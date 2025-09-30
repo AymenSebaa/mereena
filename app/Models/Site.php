@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\BelongsToOrganization;
 
 class Site extends Model {
+    use SoftDeletes, BelongsToOrganization;
+
     protected $fillable = [
+        'organization_id',
         'name',
         'address',
         'lat',

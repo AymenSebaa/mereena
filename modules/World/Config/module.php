@@ -10,19 +10,9 @@ return [
         'icon'     => 'globe2',
         'children' => [
             [
-                'title' => 'Continents',
-                'icon'  => 'globe-americas',
-                'route' => 'world.continents.index',
-            ],
-            [
-                'title' => 'Regions',
-                'icon'  => 'map',
-                'route' => 'world.regions.index',
-            ],
-            [
-                'title' => 'Countries',
-                'icon'  => 'flag',
-                'route' => 'world.countries.index',
+                'title' => 'Cities',
+                'icon'  => 'buildings',
+                'route' => 'world.cities.index',
             ],
             [
                 'title' => 'States',
@@ -30,10 +20,21 @@ return [
                 'route' => 'world.states.index',
             ],
             [
-                'title' => 'Cities',
-                'icon'  => 'buildings',
-                'route' => 'world.cities.index',
+                'title' => 'Countries',
+                'icon'  => 'flag',
+                'route' => 'world.countries.index',
             ],
+            [
+                'title' => 'Regions',
+                'icon'  => 'map',
+                'route' => 'world.regions.index',
+            ],
+            [
+                'title' => 'Continents',
+                'icon'  => 'globe-americas',
+                'route' => 'world.continents.index',
+            ],
+
         ],
     ],
 ];

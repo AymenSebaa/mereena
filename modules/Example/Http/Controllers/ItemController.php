@@ -44,14 +44,10 @@ class ItemController extends Controller {
     /**
      * Remove the specified item.
      */
-    public function delete($id) {
-        $item = Item::find($id);
-        if ($item) $item->delete();
+    public function delete(Request $request) {
+        $item = Item::find($request->id);
+        $item->delete();
 
-        return response()->json([
-            'result'  => true,
-            'message' => 'Item deleted successfully',
-            'id'      => $id,
-        ]);
+        return response()->json(['result'  => true, 'message' => 'Item deleted successfully' ]);
     }
 }

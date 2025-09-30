@@ -3,61 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
-use Illuminate\Http\Request;
 
-class SiteController extends Controller {
-    public function index(Request $request) {
-        $isAjax = $request->ajax() || $request->wantsJson();
+class SiteController extends BaseCrudController {
+    protected string $modelClass = Site::class;
+    protected string $viewPrefix = 'sites';
 
-        if ($isAjax) {
-            $query = $this->getUserQuery($request->user());
-
-            if ($search = $request->input('search')) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('address', 'like', "%{$search}%");
-                });
-            }
-
-            $sites = $query->latest()->get();
-            return response()->json($sites);
-        }
-
-        return view('sites.index');
+    protected function rules(): array {
+        return [
+            'name'     => 'required|string|max:255',
+            'address'  => 'nullable|string|max:500',
+            'lat'      => 'nullable|numeric',
+            'lng'      => 'nullable|numeric',
+            'geofence' => 'nullable|json',
+        ];
     }
 
-    public function upsert(Request $request, $id = null) {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'nullable|string|max:500',
-            'lat'     => 'nullable|numeric',
-            'lng'     => 'nullable|numeric',
-            'geofence' => 'nullable|json'
-        ]);
-
-        $site = Site::updateOrCreate(
-            ['id' => $request->input('id') ?? $id],
-            $validated
-        );
-
-        return response()->json([
-            'result'  => true,
-            'message' => $request->input('id') 
-                ? "Site $site->name updated successfully" 
-                : "Site $site->name created successfully",
-            'data'    => $site,
-        ]);
-    }
-
-    public function delete($id) {
-        $site = Site::find($id);
-        if ($site) $site->delete();
-
-        return response()->json([
-            'result'  => true,
-            'message' => "Site $site->name deleted successfully",
-            'id'      => $id,
-        ]);
+    protected function label(): string {
+        return "Site";
     }
 
     public static function getUserQuery($user) {

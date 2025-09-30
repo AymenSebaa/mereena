@@ -4,9 +4,9 @@ namespace Modules\Example\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Traits\BelongsToOrganization;
 class Item extends Model {
-    use SoftDeletes;
+    use SoftDeletes, BelongsToOrganization;
 
     protected $fillable = [
         'type_id',

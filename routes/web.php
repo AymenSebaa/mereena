@@ -29,7 +29,8 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-    if (Auth::check()) return redirect()->route('dashboard');
+    $slug = auth()->user()?->organization?->slug ?? 'admin';
+    if (Auth::check()) return redirect()->route('dashboard', ['organization_slug' => $slug]);
     return view('auth.otp-login');
 });
 
@@ -111,6 +112,7 @@ Route::middleware(['auth', EnsureOtpVerified::class])->prefix('{organization_slu
         Route::get('/{id?}', [TypeController::class, 'index'])->name('types.index');
         Route::post('/upsert', [TypeController::class, 'upsert'])->name('types.upsert');
         Route::delete('/delete/{id}', [TypeController::class, 'delete'])->name('types.delete');
+        Route::post('/search', [TypeController::class, 'search'])->name('types.search');
     });
 
     Route::middleware([CheckPermission::class . ':settings.zones'])->prefix('zones')->group(function () {

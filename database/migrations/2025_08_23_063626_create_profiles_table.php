@@ -11,23 +11,19 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->unsignedBigInteger('role_id')->unique();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('role_id')->nullable()->constrained('roles')->cascadeOnDelete();
             $table->string('category')->nullable();
-            $table->unsignedBigInteger('country_id')->unique();
-            $table->unsignedBigInteger('hotel_id')->nullable();
-            $table->unsignedBigInteger('zone_id')->nullable();
+            $table->string('address')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained('countries')->cascadeOnDelete();
+            $table->foreignId('site_id')->nullable()->constrained('sites')->cascadeOnDelete();
+            $table->foreignId('zone_id')->nullable()->constrained('zones')->cascadeOnDelete();
             $table->string('phone', 20)->nullable()->unique();
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('lng', 10, 7)->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('category')->references('name')->on('types')->onDelete('set null');
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
-            $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('set null');
-            $table->foreign('zone_id')->references('id')->on('zones')->onDelete('set null');
         });
     }
 

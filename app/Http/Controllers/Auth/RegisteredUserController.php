@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller {
 
         $this->registrationService->register($request);
 
-        return redirect(route('dashboard'));
+        return redirect(route('otp.verify'));
     }
 }

@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('organization_id')->nullable()->constrained('organizations')->cascadeOnDelete();
             $table->string('name');
             $table->string('address')->nullable();
             $table->decimal('lat', 10, 7)->nullable();

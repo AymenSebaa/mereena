@@ -15,12 +15,11 @@ return new class extends Migration {
 		if (!Schema::hasTable('types')) {
 			Schema::create('types', function (Blueprint $table) {
 				$table->id();
-				$table->foreignId('type_id')->nullable(true)->index();
+				$table->foreignId('type_id')->nullable()->constrained('types')->cascadeOnDelete();
 				$table->boolean('status')->default(1)->comment("0: deactive, 1: active");
 				$table->string('name');
 				$table->timestamps();
-
-				$table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
+            	$table->softDeletes();
 			});
 		}
 	}

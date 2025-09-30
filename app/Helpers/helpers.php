@@ -1,5 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
+
 function v($value) {
     if (is_null($value) || $value === '') return null;
     if (is_array($value)) return json_encode($value, JSON_UNESCAPED_UNICODE);
@@ -48,9 +54,18 @@ function installModule($module, $table, $seeder) {
 }
 
 function oRoute($name, $parameters = [], $absolute = true) {
-    $slug = auth()->user()?->organization?->slug ?? 'admin';
+    $slug = Auth::user()?->organization?->slug ?? 'admin';
     if (!is_array($parameters)) $parameters = [$parameters];
     $parameters = array_merge(['organization_slug' => $slug], $parameters);
 
     return route($name, $parameters, $absolute);
+}
+
+function udsRoutes($prefix, $controller, $namePrefix) {
+    Route::prefix($prefix)->group(function () use ($controller, $namePrefix) {
+        Route::get('/', [$controller, 'index'])->name("$namePrefix.index");
+        Route::post('/upsert', [$controller, 'upsert'])->name("$namePrefix.upsert");
+        Route::delete('/{id}', [$controller, 'delete'])->name("$namePrefix.delete");
+        Route::post('/search', [$controller, 'search'])->name("$namePrefix.search");
+    });
 }

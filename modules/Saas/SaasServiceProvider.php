@@ -22,6 +22,10 @@ class SaasServiceProvider extends ServiceProvider {
         // Publish config
         $this->mergeConfigFrom(__DIR__ . '/Config/module.php', 'modules.saas');
 
+        $this->registerRelations();
+    }
+
+    private function registerRelations() {
         // Add dynamic relation "organization" to User model
         User::resolveRelationUsing('organization', function ($userModel) {
             return $userModel->hasOneThrough(

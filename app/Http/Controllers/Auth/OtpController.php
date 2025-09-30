@@ -47,7 +47,8 @@ class OtpController extends Controller {
         $latestOtp->expires_at = now()->addDay(7);
         $latestOtp->save();
 
-        return redirect()->route('dashboard')->with('success', 'OTP verified!');
+        $slug = auth()->user()?->organization?->slug ?? 'admin';
+        return redirect()->route('dashboard', ['organization_slug' => $slug])->with('success', 'OTP verified!');
     }
 
     public function remaining() {

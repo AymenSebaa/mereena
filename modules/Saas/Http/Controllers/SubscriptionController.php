@@ -2,40 +2,30 @@
 
 namespace Modules\Saas\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\BaseCrudController;
 use Modules\Saas\Models\Subscription;
 
-class SubscriptionController extends Controller {
-    public function index() {
-        $subscriptions = Subscription::with(['organization', 'plan', 'invoices'])->get();
-        return view('saas::subscriptions.index', compact('subscriptions'));
-    }
+class SubscriptionController extends BaseCrudController {
+    protected string $modelClass = Subscription::class;
+    protected string $viewPrefix = 'saas::subscriptions';
+    protected array $with = ['organization', 'plan'];
 
-    public function upsert(Request $request) {
-        $id = $request->id;
 
-        $validated = $request->validate([
+    protected function rules(): array {
+        return [
             'organization_id' => 'required|exists:organizations,id',
             'plan_id'         => 'required|exists:plans,id',
             'status'          => 'required|string|max:50',
             'starts_at'       => 'nullable|date',
             'ends_at'         => 'nullable|date',
-        ]);
-
-        $subscription = Subscription::updateOrCreate(['id' => $id], $validated);
-
-        return response()->json([
-            'result' => true,
-            'message' => $id ? 'Subscription updated successfully' : 'Subscription created successfully',
-            'data' => $subscription,
-        ]);
+        ];
     }
 
-    public function delete($id) {
-        if ($sub = Subscription::find($id)) $sub->delete();
-
-        return response()->json(['result' => true, 'message' => 'Subscription deleted']);
+    protected function label(): string {
+        return 'Subscription';
     }
 
+    protected function with(): array {
+        return ['organization', 'plan', 'invoices'];
+    }
 }

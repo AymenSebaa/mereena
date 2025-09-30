@@ -24,14 +24,15 @@ class UserRegistrationService {
             'password' => Hash::make($request->password), // ✅ Secure hashing
         ]);
 
-        $roleId = 10; // default guest
+        $roleId = $request->role_id ?? 10; // default guest
 
         $profile = Profile::firstOrCreate(['user_id' => $user->id]);
         $profile->role_id    = $roleId;
         $profile->country_id = v($request->country_id);
-        $profile->hotel_id   = v($request->hotel_id);
+        $profile->site_id    = v($request->site_id);
         $profile->category   = v($category);
         $profile->phone      = v($request->phone);
+        $profile->address      = v($request->address);
         $profile->save();
 
         event(new Registered($user));

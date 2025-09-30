@@ -59,4 +59,22 @@ class TypeController extends Controller {
 		}
 		return back()->with('success', 'Delete successfully');
 	}
+
+	public function search(Request $request) {
+		$term = $request->q;
+		$parentName = $request->parent_name;
+
+		if ($parentName) {
+			$query = Type::where('name', $parentName)->first();
+		}
+
+		if (!$term) {
+			return response()->json([]);
+		}
+
+		$types = $query->where('name', 'like', "%{$term}%")->get();
+
+
+		return response()->json($types);
+	}
 }

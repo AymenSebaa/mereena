@@ -2,39 +2,23 @@
 
 namespace Modules\Saas\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\BaseCrudController;
 use Modules\Saas\Models\OrganizationUser;
 
-class OrganizationUserController extends Controller {
-    public function index() {
-        $orgUsers = OrganizationUser::with(['organization', 'user'])->get();
-        return view('saas::organization_users.index', compact('orgUsers'));
-    }
+class OrganizationUserController extends BaseCrudController {
+    protected string $modelClass = OrganizationUser::class;
+    protected string $viewPrefix = 'saas::organization_users';
+    protected array $with = ['organization', 'user'];
 
-    public function upsert(Request $request) {
-        $id = $request->id;
-
-        $validated = $request->validate([
+    protected function rules(): array {
+        return [
             'organization_id' => 'required|exists:organizations,id',
             'user_id'         => 'required|exists:users,id',
             'role'            => 'required|string|max:50',
-        ]);
-
-        $orgUser = OrganizationUser::updateOrCreate(['id' => $id], $validated);
-
-        $orgUser->load(['organization', 'user']);
-
-        return response()->json([
-            'result' => true,
-            'message' => $id ? 'Organization User updated successfully' : 'Organization User created successfully',
-            'data' => $orgUser,
-        ]);
+        ];
     }
 
-    public function delete($id) {
-        if ($orgUser = OrganizationUser::find($id)) $orgUser->delete();
-
-        return response()->json(['result' => true, 'message' => 'Organization User deleted']);
+    protected function label(): string {
+        return 'Organization User';
     }
 }

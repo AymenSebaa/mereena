@@ -57,7 +57,7 @@
             'route' => 'guests.index',
             'pattern' => 'guests.*',
             'icon' => 'bi bi-people',
-            'text' => 'Guests',
+            'text' => 'Customers',
             'badge' => 'guest_count',
         ],
         [

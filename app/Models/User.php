@@ -17,7 +17,7 @@ class User extends Authenticatable {
      * @var list<string>
      */
     protected $fillable = [
-        'role_id',
+        'organization_id',
         'name',
         'email',
         'password',
@@ -50,7 +50,7 @@ class User extends Authenticatable {
     }
 
     public function profile() {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class, 'user_id', 'id');
     }
 
     public function lastOtp() {

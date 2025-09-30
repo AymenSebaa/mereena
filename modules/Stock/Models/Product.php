@@ -6,9 +6,10 @@ use App\Models\Company;
 use App\Models\Type;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\BelongsToOrganization;
 
 class Product extends Model {
-    use SoftDeletes;
+    use SoftDeletes, BelongsToOrganization;
 
     protected $fillable = [
         'company_id',
