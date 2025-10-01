@@ -48,10 +48,9 @@ abstract class BaseCrudController extends Controller {
     public function upsert(Request $request, $id = null) {
         $validated = $request->validate($this->rules());
 
-        // handle images
         foreach ($this->imageFields as $field) {
-            if ($request->hasFile($field)) {
-                $validated[$field] = $this->handleImages($request->file($field), $field, $id);
+            if ($request->has($field)) {
+                $validated[$field] = $this->handleImages($request->input($field), $field, $id);
             }
         }
 
@@ -69,6 +68,36 @@ abstract class BaseCrudController extends Controller {
                 : "{$this->label()} {$item->name} created successfully",
             'data'    => $item,
         ]);
+    }
+
+    protected function handleImages(array $base64Images, string $field, $id = null): array {
+        $uploadDir = "../../public_html/mereena/{$this->uploadPath}";
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
+
+        $paths = [];
+        foreach ($base64Images as $b64) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $b64, $type)) {
+                $b64 = substr($b64, strpos($b64, ',') + 1);
+                $ext = strtolower($type[1]); // jpg, png, gif
+                $data = base64_decode($b64);
+                $filename = uniqid() . '.' . $ext;
+                file_put_contents("{$uploadDir}/{$filename}", $data);
+                $paths[] = "{$this->uploadPath}/{$filename}";
+            }
+        }
+
+        // delete old images if updating
+        if ($id) {
+            $item = ($this->modelClass)::find($id);
+            if ($item && !empty($item->{$field}) && is_array($item->{$field})) {
+                foreach ($item->{$field} as $old) {
+                    $oldPath = public_path($old);
+                    if (is_file($oldPath)) unlink($oldPath);
+                }
+            }
+        }
+
+        return $paths;
     }
 
     public function delete(Request $request) {
@@ -90,34 +119,6 @@ abstract class BaseCrudController extends Controller {
             'result'  => true,
             'message' => "{$this->label()} {$item->name} deleted successfully",
         ]);
-    }
-
-    /**
-     * Handle multiple image uploads for a field.
-     */
-    protected function handleImages(array $files, string $field, $id = null): array {
-        $uploadDir = public_path("{$this->uploadPath}/{$field}");
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
-
-        $paths = [];
-        foreach ($files as $file) {
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            $paths[] = "{$this->uploadPath}/{$field}/{$filename}";
-        }
-
-        // delete old images if updating
-        if ($id) {
-            $item = ($this->modelClass)::find($id);
-            if ($item && !empty($item->{$field}) && is_array($item->{$field})) {
-                foreach ($item->{$field} as $old) {
-                    $oldPath = public_path($old);
-                    if (is_file($oldPath)) unlink($oldPath);
-                }
-            }
-        }
-
-        return $paths;
     }
 
     abstract protected function rules(): array;

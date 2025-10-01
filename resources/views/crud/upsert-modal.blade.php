@@ -10,7 +10,7 @@
                 <h5 class="modal-title">Upsert {{ $item ?? 'item' }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="crudForm">
+            <form id="crudForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" id="crud_id">
                 <div class="modal-body">
@@ -35,25 +35,33 @@
         $("#crudForm")[0].reset();
         $("#crud_id").val("");
         $("#crudFormAlert").addClass("d-none").text("");
+
+        if (window.uploaders) {
+            window.uploaders.forEach(u => u.reset());
+        }
     }
 
     $("#crudForm").on("submit", async function(e) {
         e.preventDefault();
-        let formData = $(this).serialize();
+
+        let formData = $(this).serialize(); // base64 hidden inputs included
 
         $("#crudSaveBtn").prop("disabled", true);
         $("#crudSaveBtnText").text("Saving...");
         $("#crudSaveBtnSpinner").removeClass("d-none");
 
         try {
-            let res = await $.post("{{ oRoute($routePrefix.'.upsert') }}", formData);
+            let res = await $.post("{{ oRoute($routePrefix . '.upsert') }}", formData);
+
             if (res.result) {
                 fetchItems(); // reload list
                 bootstrap.Modal.getInstance($("#crudUpsertModal")[0]).hide();
                 resetCrudForm();
             }
         } catch (xhr) {
-            $("#crudFormAlert").removeClass("d-none alert-success").addClass("alert-danger")
+            $("#crudFormAlert")
+                .removeClass("d-none alert-success")
+                .addClass("alert-danger")
                 .text(xhr.responseJSON?.message || "Save failed");
         } finally {
             $("#crudSaveBtn").prop("disabled", false);
@@ -69,10 +77,10 @@
             console.error("Item not found:", id);
             return;
         }
-
         $("#crud_id").val(item.id);
         @yield('extra-fill')
         new bootstrap.Modal($("#crudUpsertModal")).show();
     }
 </script>
 @endpush
+

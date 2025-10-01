@@ -94,7 +94,7 @@
     <script>
         let guestsData = [];
         let currentPage = 1;
-        const perPage = 12;
+        const perPage = 48;
 
         let mapApiReady = false;
 

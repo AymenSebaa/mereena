@@ -20,7 +20,7 @@ class ProductController extends BaseCrudController {
             'category_id' => 'required|integer|exists:types,id',
             'brand'       => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'images.*'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            // 'images.*'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ];
     }
 

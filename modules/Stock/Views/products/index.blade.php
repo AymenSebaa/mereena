@@ -17,10 +17,10 @@
 
     <div class="carousel slide mb-2" id="carousel_${item.id}" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            ${item.images.map((img,i) => `<button type="button" data-bs-target="#carousel_${item.id}" data-bs-slide-to="${i}" ${i===0?'class="active"':''}></button>`).join('')}
+            ${item.images?.map((img,i) => `<button type="button" data-bs-target="#carousel_${item.id}" data-bs-slide-to="${i}" ${i===0?'class="active"':''}></button>`).join('')}
         </div>
         <div class="carousel-inner">
-            ${item.images.map((img,i) => `<div class="carousel-item ${i===0?'active':''}">
+            ${item.images?.map((img,i) => `<div class="carousel-item ${i===0?'active':''}">
                 <img src="{{ env('APP_URL') }}/${img}" class="d-block w-100" style="height:150px;object-fit:cover;">
             </div>`).join('')}
         </div>

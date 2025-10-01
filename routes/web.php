@@ -86,6 +86,7 @@ Route::middleware(['auth', EnsureOtpVerified::class])->prefix('{organization_slu
     Route::middleware([CheckPermission::class . ':guests'])->prefix('guests')->group(function () {
         Route::get('/', [GuestController::class, 'index'])->name('guests.index');
         Route::get('/live', [GuestController::class, 'live'])->name('guests.live');
+        Route::get('/import', [GuestController::class, 'import'])->name('guests.import');
     });
 
     Route::middleware([CheckPermission::class . ':reservations'])->prefix('reservations')->group(function () {

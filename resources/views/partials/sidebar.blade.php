@@ -155,8 +155,8 @@
             <div>
                 <small class="text-light"><b>{{ auth()->user()->profile->role->name }}</b></small>
                 <span>{{ auth()->user()->profile->category ?? '' }}</span>
+                <small class="text-gray">{{ auth()->user()->email }}</small>
             </div>
-            <small class="text-gray">{{ auth()->user()->email }}</small>
         </div>
         <div class="d-flex align-items-center">
             <button class="theme-toggle me-2" id="themeToggle">

@@ -1,5 +1,5 @@
 @section('extra-fields')
-    <x-preview-upload name="product_images" label="Product Images" />
+    <x-preview-upload name="images" label="Product Images" />
 
     <div class="mb-3">
         <label>Name</label>

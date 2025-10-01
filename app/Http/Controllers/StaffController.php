@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Staff;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Site;
 use App\Models\Zone;
-use App\Models\Country;
 use Illuminate\Http\Request;
-
+use Modules\World\Models\State;
+use Modules\World\Models\Country;
 class StaffController extends Controller {
     public function index(Request $request) {
         $user = $request->user();
         $profile = $user->profile;
 
-        $staffQuery = User::with(['profile.role', 'profile.site', 'profile.zone', 'profile.country'])
+        $staffQuery = Staff::with(['profile.role', 'profile.site', 'profile.zone', 'profile.state', 'profile.country'])
             ->whereHas('profile', fn($q) => $q->where('role_id', '!=', 10)); // exclude Guests
 
         // Supervisor or Manager (role_id 3 or 6)
@@ -29,14 +29,15 @@ class StaffController extends Controller {
             });
         }
 
-        $staff = $staffQuery->orderByDesc('id')->paginate(1200);
+        $data['staff'] = $staffQuery->orderByDesc('id')->paginate(1200);
 
-        $roles = Role::all();
-        $sites = Site::orderBy('name')->get();
-        $zones = Zone::orderBy('name')->get();
-        $countries = Country::orderBy('name')->get();
+        $data['roles'] = Role::all();
+        $data['sites'] = Site::orderBy('name')->get();
+        $data['zones'] = Zone::orderBy('name')->get();
+        $data['states'] = State::orderBy('name')->get();
+        $data['countries'] = Country::orderBy('name')->get();
 
-        return view('staff.index', compact('staff', 'roles', 'sites', 'zones', 'countries'));
+        return view('staff.index', $data);
     }
 
 
@@ -47,13 +48,14 @@ class StaffController extends Controller {
             'email'      => ['required', 'email', 'max:255', 'unique:users,email,' . $request->id],
             'role_id'    => ['required', 'exists:roles,id'],
             'country_id' => ['required', 'exists:countries,id'],
-            'site_id'   => ['nullable', 'exists:sites,id'],
+            'state_id'   => ['nullable', 'exists:states,id'],
+            'site_id'    => ['nullable', 'exists:sites,id'],
             'zone_id'    => ['nullable', 'exists:zones,id'],
             'phone'      => ['nullable', 'string', 'max:20', 'unique:profiles,phone,' . optional(Profile::where('user_id', $request->id)->first())->id],
         ]);
 
         // Update or create the user
-        $user = User::updateOrCreate(
+        $staff = Staff::updateOrCreate(
             ['id' => v($request->id)],
             [
                 'name'  => v($request->name),
@@ -62,7 +64,7 @@ class StaffController extends Controller {
         );
 
         // Update or create the profile
-        $profile = Profile::firstOrCreate(['user_id' => $user->id]);
+        $profile = Profile::firstOrCreate(['user_id' => $staff->id]);
         $profile->role_id    = v($request->role_id);
         $profile->country_id = v($request->country_id);
         $profile->phone      = v($request->phone);
@@ -72,11 +74,14 @@ class StaffController extends Controller {
 
         $profile->site_id = null;
         $profile->zone_id  = null;
+        $profile->state_id  = null;
 
         if ($roleId === 3 || $roleId === 6) { // Supervisor => zone
             $profile->zone_id  = v($request->zone_id);
         } elseif ($roleId === 4) { // Operator => site
             $profile->site_id = v($request->site_id);
+        } elseif ($roleId === 13) { // Operator => site
+            $profile->state_id = v($request->state_id);
         }
 
         $profile->save();
@@ -84,13 +89,13 @@ class StaffController extends Controller {
         return response()->json([
             'success' => true,
             'message' => 'Staff saved successfully',
-            'user_id' => $user->id,
+            'staff_id' => $staff->id,
         ]);
     }
 
 
-    public function destroy(User $user) {
-        $user->delete();
+    public function destroy(Staff $staff) {
+        $staff->delete();
         return response()->json(['success' => true, 'message' => 'Staff deleted successfully']);
     }
 }

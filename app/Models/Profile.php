@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\World\Models\State;
+use Modules\World\Models\Country;
 
 class Profile extends Model {
     use HasFactory;
@@ -14,9 +16,11 @@ class Profile extends Model {
         'category',
         'address',
         'country_id', 
+        'state_id', 
         'site_id',
         'zone_id',
         'phone',
+        'sector',
         'lat',
         'lng',
     ];
@@ -31,6 +35,10 @@ class Profile extends Model {
 
     public function country() {
         return $this->belongsTo(Country::class);
+    }
+
+    public function state() {
+        return $this->belongsTo(State::class);
     }
 
     public function site() {

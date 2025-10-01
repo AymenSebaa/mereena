@@ -64,7 +64,7 @@
                             <select class="form-select" name="country_id" id="staff-country" required>
                                 <option value="">-- Select Country --</option>
                                 @foreach ($countries as $country)
-                                    <option value="{{ $country->id }}">{{ $country->name_en }}</option>
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -72,7 +72,7 @@
                         <!-- Phone -->
                         <div class="col-md-6">
                             <label class="form-label">Phone</label>
-                            <input type="tel" class="form-control" name="phone" id="staff-phone" required>
+                            <input type="tel" class="form-control" name="phone" id="staff-phone" >
                         </div>
 
                         <!-- Role -->
@@ -108,6 +108,17 @@
                             </select>
                         </div>
 
+                        <!-- State -->
+                        <div class="col-md-8 d-none" id="state-wrapper">
+                            <label class="form-label">State</label>
+                            <select class="form-select" name="state_id" id="staff-state">
+                                <option value="">-- Select State --</option>
+                                @foreach ($states as $state)
+                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                 </div>
 
@@ -126,20 +137,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             const staffModal = new bootstrap.Modal(document.getElementById('staffModal'));
 
-            const siteWrapper = document.getElementById('site-wrapper');
-            const zoneWrapper = document.getElementById('zone-wrapper');
+            const siteWrapper = document.getElementById('site-wrapper'); 
+            const zoneWrapper = document.getElementById('zone-wrapper'); 
+            const stateWrapper = document.getElementById('state-wrapper'); 
             const roleSelect = document.getElementById('staff-role');
 
             function toggleSiteZone(roleId) {
                 // hide both by default
                 siteWrapper.classList.add('d-none');
                 zoneWrapper.classList.add('d-none');
+                stateWrapper.classList.add('d-none');
 
                 // Show based on role
                 if (roleId == 3 || roleId == 6) { // Supervisor or Despatcher
                     zoneWrapper.classList.remove('d-none');
                 } else if (roleId == 4) { // Operator
                     siteWrapper.classList.remove('d-none');
+                } else if (roleId == 13) { // Sales Agent
+                    stateWrapper.classList.remove('d-none');
                 }
             }
 
@@ -173,6 +188,7 @@
                 document.getElementById('staff-country').value = user.profile?.country_id ?? '';
                 document.getElementById('staff-site').value = user.profile?.site_id ?? '';
                 document.getElementById('staff-zone').value = user.profile?.zone_id ?? '';
+                document.getElementById('staff-state').value = user.profile?.state_id ?? '';
                 toggleSiteZone(user.profile?.role_id);
                 staffModal.show();
             };
@@ -272,10 +288,11 @@
                                 <i class="bi bi-people me-1"></i> ${_(user.profile?.role?.name ?? '-')}
                             </span>
                             <span class="badge country-badge">
-                                <i class="bi bi-globe me-1"></i> ${_(user.profile?.country?.name_en ?? '-')}
+                                <i class="bi bi-globe me-1"></i> ${_(user.profile?.country?.name ?? '-')}
                             </span>
                             ${user.profile?.site ? `<span class="badge site-badge"><i class="bi bi-building me-1"></i> ${_(user.profile.site.name)}</span>` : ''}
                             ${user.profile?.zone ? `<span class="badge zone-badge"><i class="bi bi-geo-alt me-1"></i> ${_(user.profile.zone.name)}</span>` : ''}
+                            ${user.profile?.state ? `<span class="badge state-badge"><i class="bi bi-geo-alt me-1"></i> ${_(user.profile.state.name)}</span>` : ''}
                         </div>
 
                         <small class="badge mt-3">
@@ -338,6 +355,7 @@
                     role,
                     site,
                     zone,
+                    state,
                     country
                 } = profile;
                 if (!lat || !lng) return;
@@ -359,8 +377,8 @@
                             <div class='text-dark'>
                                 <strong>${_(user.name)}</strong><br>
                                 Role: ${_(role.name)}<br>
-                                Site: ${_(site?.name ?? zone?.name)}<br>
-                                Country: ${_(country.name)}
+                                Site: ${_(site?.name ?? zone?.name ?? state?.name)}<br>
+                                Country: ${_(country?.name)}
                             </div>`
                 });
 
