@@ -12,7 +12,7 @@
 
         {{-- Banner 
         <div style="background-color: #fdfdfd; text-align: center; padding: 20px;">
-            <img src="{{ asset('icons/iatf.jpg') }}" alt="IATF Banner" style="max-width: 100%; height: auto;">
+            <img src="{{ asset('icons/anner.png') }}" alt="IATF Banner" style="max-width: 100%; height: auto;">
         </div>
         --}}
 

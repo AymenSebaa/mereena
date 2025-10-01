@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mt-6 mb-6 flex justify-center">
-        <img src="{{ asset('icons/iatf.jpg') }}" alt="IATF Logo" width="200" />
+        <img src="{{ asset('icons/anner.png') }}" alt="IATF Logo" width="200" />
     </div>
 
     <!-- Session Status -->

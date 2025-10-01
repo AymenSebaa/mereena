@@ -11,56 +11,51 @@
         @if (!in_array($profile->role_id, [10]))
             <div class="stats-container mb-4">
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-bus">
-                        <i class="bi bi-bus-front"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-people"></i>
                     </div>
-                    <div class="stat-title">Départs</div>
-                    <div class="stat-number">{{ $task_count ?? 0 }}</div>
+                    <div class="stat-title">Agents</div>
+                    <div class="stat-number">{{ $agent_count ?? 0 }}</div>
                 </div>
 
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-alert">
-                        <i class="bi bi-bell"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-calendar-check"></i>
                     </div>
-                    <div class="stat-title">Alerts</div>
-                    <div class="stat-number">{{ $event_count ?? 0 }}</div>
+                    <div class="stat-title">Visits Today</div>
+                    <div class="stat-number">{{ $visit_count ?? 0 }}</div>
                 </div>
 
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-hotel">
-                        <i class="bi bi-building"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-capsule"></i>
                     </div>
-                    <div class="stat-title">Hotels</div>
-                    <div class="stat-number">{{ $hotel_count ?? 0 }}</div>
-
-                    @if ($profile->role_id == 10)
-                        <small class="text-primary"> {{ $profile->hotel->name }} </small>
-                    @else
-                    @endif
+                    <div class="stat-title">Pharmacies</div>
+                    <div class="stat-number">{{ $pharmacy_count ?? 0 }}</div>
                 </div>
 
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-complaint">
-                        <i class="bi bi-chat-dots"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-hospital"></i>
                     </div>
-                    <div class="stat-title">Complaints</div>
-                    <div class="stat-number">{{ $complaint_count ?? 0 }}</div>
+                    <div class="stat-title">Doctors</div>
+                    <div class="stat-number">{{ $doctor_count ?? 0 }}</div>
                 </div>
 
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-bus">
-                        <i class="bi bi-bus-front"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-cart-check"></i>
                     </div>
-                    <div class="stat-title">Buses</div>
-                    <div class="stat-number">{{ $bus_count ?? 0 }}</div>
+                    <div class="stat-title">Orders</div>
+                    <div class="stat-number">{{ $order_count ?? 0 }}</div>
                 </div>
 
                 <div class="stat-card animate-on-load">
-                    <div class="stat-icon icon-alert">
-                        <i class="bi bi-signpost-split"></i>
+                    <div class="stat-icon">
+                        <i class="bi bi-exclamation-circle"></i>
                     </div>
-                    <div class="stat-title">N° quais de retour</div>
-                    <div class="stat-number">{{ $returnQuaisCount ?? 16 }}</div>
+                    <div class="stat-title">Stock Alerts</div>
+                    <div class="stat-number">{{ $stock_alerts ?? 0 }}</div>
                 </div>
             </div>
         @endif
@@ -115,76 +110,37 @@
         <!-- Map Overlay Cards -->
         <div class="map-overlay mb-4">
 
-            <!-- Upcoming Departures -->
             <div class="overlay-card">
                 <div class="card-title">
-                    <span>Upcoming Departures</span>
-                    <a href="{{ oRoute('tasks.index') }}" class="view-all">View All</a>
+                    <span>Upcoming Visits</span>
+                    <a href="" class="view-all">View All</a>
                 </div>
 
-                @if (isset($recentTasks) && $recentTasks->count())
-                    @foreach ($recentTasks as $task)
+                @if (isset($upcomingVisits) && $upcomingVisits->count())
+                    @foreach ($upcomingVisits as $visit)
                         @php
-                            $from = $task->pickup_time_from ? Carbon\Carbon::parse($task->pickup_time_from) : null;
-                            $to = $task->pickup_time_to ? Carbon\Carbon::parse($task->pickup_time_to) : null;
-                            $now = Carbon\Carbon::now();
-
-                            $statusClass = 'status-pending';
-                            $statusText = 'Pending';
-
-                            if ($to && $to->lt($now)) {
-                                $statusClass = 'status-offline';
-                                $statusText = 'Offline';
-                            } elseif ($from && $to && $from->lte($now) && $to->gte($now)) {
-                                $statusClass = 'status-online';
-                                $statusText = 'Online';
-                            }
-
-                            $routeText =
-                                $task->title ??
-                                ($task->hotel->name ?? 'Hotel') . ' → ' . ($task->destination ?? 'Destination');
+                            $from = $visit->time_from ? Carbon\Carbon::parse($visit->time_from) : null;
+                            $to = $visit->time_to ? Carbon\Carbon::parse($visit->time_to) : null;
                         @endphp
-
                         <div class="departure-item">
-                            <div class="departure-icon">
-                                <i class="fas fa-bus"></i>
-                            </div>
-
+                            <div class="departure-icon"><i class="bi bi-calendar-event"></i></div>
                             <div class="departure-details">
-                                <div class="departure-route">{{ $routeText }}</div>
-                                <div class="departure-location">
-                                    {{ $task->hotel->name ?? 'Unknown Hotel' }}
-                                    @if (!empty($task->bus?->plate))
-                                        &middot; {{ $task->bus->plate }}
-                                    @endif
-                                </div>
+                                <div class="departure-route">{{ $visit->client->name }}</div>
+                                <div class="departure-location">{{ $visit->client->address }}</div>
                                 <div class="d-flex justify-content-between">
                                     <div class="departure-time">
-                                        @if ($from)
-                                            {{ $from->format('H:i') }}
-                                        @else
-                                            --:--
-                                        @endif
-                                        -
-                                        @if ($to)
-                                            {{ $to->format('H:i') }}
-                                        @else
-                                            --:--
-                                        @endif
+                                        {{ $from?->format('H:i') ?? '--:--' }} - {{ $to?->format('H:i') ?? '--:--' }}
                                     </div>
-                                    <span class="departure-status {{ $statusClass }}">{{ $statusText }}</span>
+                                    <span class="departure-status status-pending">Planned</span>
                                 </div>
                             </div>
-
                         </div>
                     @endforeach
                 @else
                     <div class="departure-item">
-                        <div class="departure-icon">
-                            <i class="fas fa-calendar-times"></i>
-                        </div>
+                        <div class="departure-icon"><i class="fas fa-calendar-times"></i></div>
                         <div class="departure-details">
-                            <div class="departure-route">No upcoming departures</div>
+                            <div class="departure-route">No visits scheduled</div>
                             <div class="departure-location">You’re all caught up</div>
                             <div class="departure-time">—</div>
                         </div>
@@ -207,95 +163,38 @@
 
         <div class="map-overlay">
             <!-- Alerts & Notifications -->
-            <div class="overlay-card">
-                <div class="card-title">
-                    <span>Alerts &amp; Notifications</span>
-                    <a href="{{ oRoute('tasks.index') }}" class="view-all">View All</a>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(229, 127, 8, 0.2)); color: var(--warning);">
-                        <i class="fas fa-exclamation-triangle"></i>
+            <div class="map-overlay">
+                <div class="overlay-card">
+                    <div class="card-title">
+                        <span>Stock & System Alerts</span>
+                        <a href="" class="view-all">View All</a>
                     </div>
-                    <div class="departure-details">
-                        <div class="departure-route">Traffic Alert</div>
-                        <div class="departure-location">Heavy traffic reported on Didouche Mourad Street</div>
-                        <div class="departure-time">Updated: {{ \Carbon\Carbon::now()->format('H:i') }}</div>
-                    </div>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.2)); color: var(--primary);">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <div class="departure-details">
-                        <div class="departure-route">System Maintenance</div>
-                        <div class="departure-location">Scheduled this weekend from 02:00 to 04:00</div>
-                        <div class="departure-time">Updated: {{ \Carbon\Carbon::now()->subHours(2)->format('H:i') }}</div>
-                    </div>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.2)); color: var(--success);">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <div class="departure-details">
-                        <div class="departure-route">New Features Available</div>
-                        <div class="departure-location">Real-time tracking now available for all routes in Algiers</div>
-                        <div class="departure-time">Updated: {{ \Carbon\Carbon::now()->subMinutes(30)->format('H:i') }}
+                    <div class="departure-item">
+                        <div class="departure-icon" style="color: var(--warning);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="departure-details">
+                            <div class="departure-route">Low Stock</div>
+                            <div class="departure-location">Paracetamol 500mg below threshold</div>
+                            <div class="departure-time">Updated: {{ now()->format('H:i') }}</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="overlay-card">
-                <div class="card-title">
-                    <span>Events & Activities</span>
-                    <a href="{{ oRoute('events.index') }}" class="view-all">View All</a>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.2)); color: var(--primary);">
-                        <i class="fas fa-calendar-alt"></i>
+                <div class="overlay-card">
+                    <div class="card-title">
+                        <span>Events & Promotions</span>
+                        <a href="" class="view-all">View All</a>
                     </div>
-                    <div class="departure-details">
-                        <div class="departure-route">Opening Ceremony</div>
-                        <div class="departure-location">CIC Conference Center, Algiers</div>
-                        <div class="departure-time">09:00 – 11:00</div>
-                        <div class="departure-location small ">A celebration marking the start of IATF 2025 with
-                            keynote speeches and cultural performances.</div>
-                    </div>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.2)); color: var(--success);">
-                        <i class="fas fa-handshake"></i>
-                    </div>
-                    <div class="departure-details">
-                        <div class="departure-route">Trade & Investment Forum</div>
-                        <div class="departure-location">SAFEX Exhibition Grounds</div>
-                        <div class="departure-time">11:30 – 14:00</div>
-                        <div class="departure-location small ">Panel discussions with African and international
-                            investors on trade facilitation and partnerships.</div>
-                    </div>
-                </div>
-
-                <div class="departure-item">
-                    <div class="departure-icon"
-                        style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(229, 127, 8, 0.2)); color: var(--warning);">
-                        <i class="fas fa-music"></i>
-                    </div>
-                    <div class="departure-details">
-                        <div class="departure-route">Evening Gala & Networking</div>
-                        <div class="departure-location">CIC Main Hall</div>
-                        <div class="departure-time">19:00 – 22:00</div>
-                        <div class="departure-location small ">An evening of music, cultural showcases, and
-                            business networking opportunities.</div>
+                    <div class="departure-item">
+                        <div class="departure-icon" style="color: var(--success);">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="departure-details">
+                            <div class="departure-route">New Product Launch</div>
+                            <div class="departure-location">Amoxicillin XR – National Campaign</div>
+                            <div class="departure-time">Tomorrow 10:00</div>
+                        </div>
                     </div>
                 </div>
             </div>
