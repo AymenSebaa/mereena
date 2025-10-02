@@ -13,7 +13,7 @@ class InventoryController extends BaseCrudController {
     protected function rules(): array {
         return [
             'product_id'  => 'required|exists:products,id',
-            'supplier_id' => 'required|exists:suppliers,id',
+            'supplier_id' => 'required|exists:users,id',
             'price'       => 'required|numeric|min:0',
             'quantity'    => 'required|numeric|min:0',
             'made_at'     => 'nullable|date',

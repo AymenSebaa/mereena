@@ -5,42 +5,28 @@ return [
     'slug'    => 'stock',
     'version' => '1.0.0',
 
-    // Sidebar / Navigation definition
+    /*
+    |--------------------------------------------------------------------------
+    | Sidebar / Navigation
+    |--------------------------------------------------------------------------
+    */
     'menu' => [
+        'key'      => 'stock',
         'title'    => 'Stock',
         'icon'     => 'boxes',
         'children' => [
             [
-                'title' => 'Inventory',
+                'key'   => 'inventories',
+                'title' => 'Inventories',
                 'icon'  => 'dropbox',
                 'route' => 'stock.inventories.index',
             ],
             [
+                'key'   => 'products',
                 'title' => 'Products',
                 'icon'  => 'box-seam',
                 'route' => 'stock.products.index',
             ],
         ],
-    ],
-
-    // Optional: permissions for RBAC
-    'permissions' => [
-        'view_products',
-        'create_products',
-        'edit_products',
-        'delete_products',
-
-        'view_inventory',
-        'update_inventory',
-
-        'view_suppliers',
-        'create_suppliers',
-        'edit_suppliers',
-        'delete_suppliers',
-
-        'view_orders',
-        'create_orders',
-        'edit_orders',
-        'delete_orders',
     ],
 ];

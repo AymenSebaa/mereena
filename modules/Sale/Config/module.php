@@ -13,6 +13,7 @@ return [
         'icon'     => 'icon',
         'children' => [
             [
+                'key' => 'orders',
                 'title' => 'Orders',
                 'icon'  => 'receipt',
                 'route' => 'stock.orders.index',

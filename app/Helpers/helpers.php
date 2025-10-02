@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Role;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -68,4 +68,8 @@ function udsRoutes($prefix, $controller, $namePrefix) {
         Route::delete('/{id}', [$controller, 'delete'])->name("$namePrefix.delete");
         Route::post('/search', [$controller, 'search'])->name("$namePrefix.search");
     });
+}
+
+function roleId($name) {
+    return Role::where('name', $name)->first()->id ?? null;
 }

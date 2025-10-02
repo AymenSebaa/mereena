@@ -58,7 +58,7 @@
 
 </head>
 @php
-    $permissions = auth()->user()->profile->role->permissions ?? [];
+    $permissions = auth()->user()->profile->role->permissions ??  [];
 @endphp
 
 <body>

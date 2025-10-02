@@ -3,7 +3,7 @@
         fetchUrl="{{ oRoute('stock.products.search') }}" />
 
     <x-select-search id="supplier_input" hiddenId="supplier_id" label="Supplier" name="supplier_id" placeholder="Search supplier..."
-        fetchUrl="{{ oRoute('stock.suppliers.search') }}" />
+        fetchUrl="{{ oRoute('procurement.suppliers.search') }}" />
     <div class="mb-3">
         <label>Price</label>
         <input type="number" class="form-control rounded-pill" name="price" id="inventory_price" required>

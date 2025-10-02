@@ -12,6 +12,7 @@ class Product extends Model {
     use SoftDeletes, BelongsToOrganization;
 
     protected $fillable = [
+        'organization_id',
         'company_id',
         'category_id',
         'name',

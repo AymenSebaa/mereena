@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('organization_id')->nullable()->constrained('organizations')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('supplier_id')->nullable()->constrained('users')->nullOnDelete();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(0);
             $table->date('made_at')->nullable();

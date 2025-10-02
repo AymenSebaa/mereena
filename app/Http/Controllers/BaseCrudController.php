@@ -33,11 +33,22 @@ abstract class BaseCrudController extends Controller {
         $q = $request->q;
         $query = ($this->modelClass)::query();
 
-        if (!empty($this->with)) $query->with($this->with);
+        if (!empty($this->with)) {
+            $query->with($this->with);
+        }
 
         $query->where(function ($builder) use ($q) {
             foreach ($this->searchable as $column) {
-                $builder->orWhere($column, 'like', "%{$q}%");
+                if (str_contains($column, '.')) {
+                    // Handle relation search: e.g. profile.phone
+                    [$relation, $field] = explode('.', $column, 2);
+                    $builder->orWhereHas($relation, function ($rel) use ($field, $q) {
+                        $rel->where($field, 'like', "%{$q}%");
+                    });
+                } else {
+                    // Normal column search
+                    $builder->orWhere($column, 'like', "%{$q}%");
+                }
             }
         });
 

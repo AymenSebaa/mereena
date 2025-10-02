@@ -185,9 +185,9 @@
                         <div class="guest-hotel">${_(guest.profile?.hotel?.name ?? '-')}</div>
                     </div>
                     <div class="guest-details">
-                        <p><i class="bi bi-envelope me-1"></i> ${_(guest.email ?? '-')}</p>
-                        <p><i class="bi bi-phone me-1"></i> ${_(guest.profile.phone ?? '-')}</p>
-                        <p><i class="bi bi-flag me-1"></i> ${_(guest.profile?.country?.name_en ?? '-')}</p>
+                        ${/* <p><i class="bi bi-envelope me-1"></i> ${_(guest.email ?? '-')}</p> */}
+                        <p><i class="bi bi-bookmark me-1"></i> ${_(guest.profile?.category ?? '-')}</p>
+                        <p><i class="bi bi-bi-geo-alt me-1"></i> ${_(guest.profile.address ?? '-')}</p>
                         <div> ${scanList} </div>
                         <small class="text-secondary">Joined: ${_(guest.created_at ?? '-')}</small>
                     </div>

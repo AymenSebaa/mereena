@@ -16,10 +16,14 @@ class StaffController extends Controller {
         $profile = $user->profile;
 
         $staffQuery = Staff::with(['profile.role', 'profile.site', 'profile.zone', 'profile.state', 'profile.country'])
-            ->whereHas('profile', fn($q) => $q->where('role_id', '!=', 10)); // exclude Guests
+            ->whereHas('profile', fn($q) => $q->where('role_id', '!=', roleId('Customer'))); // exclude Guests
+
+        if($profile->role_id == roleId('Sales Manager')) {
+            $staffQuery->whereHas('profile', fn($q) => $q->where('role_id', 13));
+        }
 
         // Supervisor or Manager (role_id 3 or 6)
-        if ($profile && in_array($profile->role_id, [3, 6]) && $profile->zone_id) {
+        if ($profile && in_array($profile->role_id, [roleId('Supervisor'), roleId('Dispatcher')]) && $profile->zone_id) {
             // Get site IDs in this zone
             $siteIds = $profile->zone->sites->pluck('id') ?? collect();
 

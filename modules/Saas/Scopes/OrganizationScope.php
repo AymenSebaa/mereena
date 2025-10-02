@@ -12,7 +12,8 @@ class OrganizationScope implements Scope {
     public function apply(Builder $builder, Model $model) {
         if (!class_exists(OrganizationUser::class)) return;
 
-        $orgId = Auth::user()?->organizationUser?->organization_id;
+        // $orgId = Auth::user()?->organizationUser?->organization_id;
+        $orgId = Auth::user()?->organization_id;
         if (!$orgId) return;
 
         $builder->where($model->getTable() . '.organization_id', $orgId);

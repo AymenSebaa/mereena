@@ -13,7 +13,7 @@ class SupplierController extends BaseCrudController {
 
     protected string $modelClass = Supplier::class;
     protected string $viewPrefix = 'procurement::suppliers';
-    protected array $searchable = ['name', 'email', 'phone'];
+    protected array $searchable = ['name', 'email', 'profile.phone'];
     protected array $defaults = [];
     protected array $with = ['profile', 'profile.role'];
 
@@ -21,8 +21,8 @@ class SupplierController extends BaseCrudController {
         $supplier = Supplier::find(request()->id);
         return [
             'name'    => 'required|string|max:255',
-            'email'   => 'required|email|max:255|unique:users,email,' . $supplier->id,
-            'phone'   => 'required|string|max:50|unique:profiles,phone,' . $supplier->profile->id,
+            'email'   => 'required|email|max:255|unique:users,email,' . $supplier?->id ?? null,
+            'phone'   => 'nullable|string|max:50|unique:profiles,phone,' . $supplier?->profile->id ?? null,
             'address' => 'nullable|string|max:500',
         ];
     }

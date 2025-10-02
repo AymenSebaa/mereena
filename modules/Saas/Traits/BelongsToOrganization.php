@@ -15,12 +15,12 @@ trait BelongsToOrganization {
 
         // Auto-fill organization_id on create/update
         static::creating(function ($model) {
-            if (!$model->organization_id && $orgId = Auth::user()?->organizationUser?->organization_id) {
+            if (!$model->organization_id && $orgId = Auth::user()->organization_id) {
                 $model->organization_id = $orgId;
             }
         });
         static::updating(function ($model) {
-            if ($orgId = Auth::user()?->organizationUser?->organization_id) {
+            if ($orgId = Auth::user()->organization_id) {
                 $model->organization_id = $orgId;
             }
         });

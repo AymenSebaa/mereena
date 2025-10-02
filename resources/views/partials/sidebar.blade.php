@@ -1,146 +1,120 @@
-@if (in_array(auth()->user()->profile->role_id, [2, 4]))
-    @include('buses.scan')
-    @include('partials.scan')
-@endif
-
 @php
-    $sidebarItems = [
+    $menus = [
         [
             'key' => 'dashboard',
+            'title' => 'Dashboard',
+            'icon' => 'house',
             'route' => 'dashboard',
-            'icon' => 'bi bi-house',
-            'text' => 'Dashboard',
-            'badge' => null,
         ],
-        /*
-        [
-            'key' => 'tasks',
-            'route' => 'tasks.index',
-            'pattern' => 'tasks.*',
-            'icon' => 'bi bi-bus-front',
-            'text' => 'Departures',
-            'badge' => 'task_count',
-        ],
-        */
         [
             'key' => 'events',
+            'title' => 'Alerts',
+            'icon' => 'bell',
             'route' => 'events.index',
-            'pattern' => 'events.*',
-            'icon' => 'bi bi-bell',
-            'text' => 'Alerts',
             'badge' => 'event_count',
         ],
         [
             'key' => 'complaints',
+            'title' => 'Complaints',
+            'icon' => 'chat-dots',
             'route' => 'complaints.index',
-            'pattern' => 'complaints.*',
-            'icon' => 'bi bi-chat-dots',
-            'text' => 'Complaints',
             'badge' => 'complaint_count',
         ],
-        /*
-        [
-            'key' => 'buses',
-            'route' => 'buses.index',
-            'pattern' => 'buses.*',
-            'icon' => 'bi bi-bus-front',
-            'text' => 'Buses',
-            'badge' => 'bus_count',
-        ],
-        */
         [
             'key' => 'sites',
+            'title' => 'Sites',
+            'icon' => 'building',
             'route' => 'sites.index',
-            'pattern' => 'sites.*',
-            'icon' => 'bi bi-building',
-            'text' => 'Sites',
             'badge' => 'site_count',
         ],
         [
             'key' => 'guests',
+            'title' => 'Customers',
+            'icon' => 'people',
             'route' => 'guests.index',
-            'pattern' => 'guests.*',
-            'icon' => 'bi bi-people',
-            'text' => 'Customers',
             'badge' => 'guest_count',
         ],
         [
             'key' => 'scans',
+            'title' => 'Scans',
+            'icon' => 'qr-code-scan',
             'route' => 'scans.index',
-            'pattern' => 'scans.*',
-            'icon' => 'bi-qr-code-scan',
-            'text' => 'Scans',
             'badge' => 'scan_count',
         ],
     ];
 
-    $menu = [
-        [
-            'key' => 'statistics',
-            'text' => 'Statistics',
-            'icon' => 'bi bi-graph-up',
-            'children' => [
-                [
-                    'key' => 'statistics.bus-score',
-                    'route' => 'statistics.bus-score',
-                    'icon' => 'bi bi-bus-front',
-                    'text' => 'Bus score',
-                ],
-                [
-                    'key' => 'statistics.operator-score',
-                    'route' => 'statistics.operator-score',
-                    'icon' => 'bi bi-person-badge',
-                    'text' => 'Operator score',
-                ],
-                [
-                    'key' => 'statistics.supervisor-score',
-                    'route' => 'statistics.supervisor-score',
-                    'icon' => 'bi bi-people',
-                    'text' => 'Supervisor score',
-                ],
-                [
-                    'key' => 'statistics.company-score',
-                    'route' => 'statistics.company-score',
-                    'icon' => 'bi bi-buildings',
-                    'text' => 'Company score',
-                ],
+    $menu_statistics = [
+        'key' => 'statistics',
+        'title' => 'Statistics',
+        'icon' => 'graph-up',
+        'children' => [
+            [
+                'key' => 'bus-score',
+                'title' => 'Bus score',
+                'icon' => 'bus-front',
+                'route' => 'statistics.bus-score',
+            ],
+            [
+                'key' => 'operator-score',
+                'title' => 'Operator score',
+                'icon' => 'person-badge',
+                'route' => 'statistics.operator-score',
+            ],
+            [
+                'key' => 'supervisor-score',
+                'title' => 'Supervisor score',
+                'icon' => 'people',
+                'route' => 'statistics.supervisor-score',
+            ],
+            [
+                'key' => 'company-score',
+                'title' => 'Company score',
+                'icon' => 'buildings',
+                'route' => 'statistics.company-score',
             ],
         ],
-        [
-            'key' => 'settings',
-            'text' => 'Settings',
-            'icon' => 'bi bi-gear',
-            'children' => [
-                [
-                    'key' => 'settings.staff',
-                    'route' => 'staff.index',
-                    'icon' => 'bi bi-people',
-                    'text' => 'Staff',
-                ],
-                [
-                    'key' => 'settings.types',
-                    'route' => 'types.index',
-                    'icon' => 'bi bi-stack',
-                    'text' => 'Types',
-                ],
-                [
-                    'key' => 'settings.zones',
-                    'route' => 'zones.index',
-                    'icon' => 'bi bi-pin-map-fill',
-                    'text' => 'Zones',
-                ],
-                [
-                    'key' => 'settings.companies',
-                    'route' => 'companies.index',
-                    'icon' => 'bi bi-buildings',
-                    'text' => 'Companies',
-                ],
+    ];
+
+    $menu_settings = [
+        'key' => 'settings',
+        'title' => 'Settings',
+        'icon' => 'gear',
+        'children' => [
+            [
+                'key' => 'staff',
+                'title' => 'Staff',
+                'icon' => 'people',
+                'route' => 'staff.index',
+            ],
+            [
+                'key' => 'types',
+                'title' => 'Types',
+                'icon' => 'stack',
+                'route' => 'types.index',
+            ],
+            [
+                'key' => 'zones',
+                'title' => 'Zones',
+                'icon' => 'pin-map-fill',
+                'route' => 'zones.index',
+            ],
+            [
+                'key' => 'companies',
+                'title' => 'Companies',
+                'icon' => 'buildings',
+                'route' => 'companies.index',
             ],
         ],
     ];
 
     $modules = App\Services\ModuleManager::all();
-    // dd($modules);
+    $menu_modules = collect($modules)->pluck('menu')->filter()->values()->toArray();
+
+    $menus = array_merge($menus, $menu_modules);
+    $menus[] = $menu_statistics;
+    $menus[] = $menu_settings;
+
+    $allowedModules = collect($permissions);
 @endphp
 
 <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
@@ -170,65 +144,75 @@
 
     <nav class="nav-items flex-grow-1 py-3 ">
 
-        @foreach ($sidebarItems as $item)
-            @if (in_array($item['key'], $permissions))
-                <div class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center px-4 py-3 text-white text-decoration-none
-                        {{ request()->routeIs($item['pattern'] ?? $item['route']) ? 'active' : '' }}"
-                        href="{{ oRoute($item['route']) }}">
-                        <div>
-                            <i class="{{ $item['icon'] }} me-3 fs-5"></i>
-                            <span class="nav-text">{{ $item['text'] }}</span>
-                        </div>
-                        @if ($item['badge'])
-                            <span id="{{ $item['badge'] }}"
-                                class="nav-badge bg-accent text-white ms-2 px-2 py-1 rounded-pill small"></span>
-                        @endif
-                    </a>
-                </div>
-            @endif
-        @endforeach
-    </nav>
+        @foreach ($menus as $menu)
+            @php
+                $hasChildren = !empty($menu['children']);
+                $menuKey = $menu['key'] ?? $menu['title'];
+                $showMenu = false;
 
-    <div class="mt-auto border-top border-white border-opacity-10 pt-3">
-        {{-- Modules --}}
-        @foreach ($modules as $module)
-            @if (isset($module['menu']))
-                <div class="nav-item">
-                    <a class="nav-link d-flex align-items-center px-4 py-3 text-white text-decoration-none
-                {{ request()->routeIs($module['menu']['route'] ?? '') ? 'active' : '' }}"
-                        @if (!empty($module['menu']['children'])) data-bs-toggle="collapse"
-                    href="#{{ $module['slug'] }}Submenu"
-                    role="button"
-                    aria-expanded="{{ collect($module['menu']['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'true' : 'false' }}"
-                    aria-controls="{{ $module['slug'] }}Submenu"
-                @elseif(isset($module['menu']['route']))
-                    href="{{ oRoute($module['menu']['route']) }}"
-                @else
-                    href="#" @endif>
-                        <i class="bi bi-{{ $module['menu']['icon'] }} me-3 fs-5"></i>
-                        <span class="nav-text">{{ $module['menu']['title'] }}</span>
+                // Check if menu or any child is allowed
+                if ($allowedModules->has($menuKey)) {
+                    $showMenu = true;
+                } elseif ($hasChildren) {
+                    foreach ($menu['children'] as $child) {
+                        if (isset($allowedModules[$menuKey]) && in_array($child['key'], $allowedModules[$menuKey])) {
+                            $showMenu = true;
+                            break;
+                        }
+                    }
+                }
 
-                        @if (!empty($module['menu']['children']))
+                // Check if submenu should be expanded based on current route
+                $isActive = false;
+                if (!empty($menu['route']) && request()->routeIs($menu['route'])) {
+                    $isActive = true;
+                } elseif ($hasChildren) {
+                    foreach ($menu['children'] as $child) {
+                        if (!empty($child['route']) && request()->routeIs($child['route'])) {
+                            $isActive = true;
+                            break;
+                        }
+                    }
+                }
+            @endphp
+
+            @if ($showMenu)
+                <div class="nav-item">
+                    @if (!empty($menu['route']))
+                        <a class="nav-link d-flex justify-content-between align-items-center px-4 py-3 text-white text-decoration-none {{ $isActive ? 'active' : '' }}"
+                            href="{{ oRoute($menu['route']) }}">
+                            <div>
+                                <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
+                                <span class="nav-text">{{ $menu['title'] }}</span>
+                            </div>
+                            @if (!empty($menu['badge']))
+                                <span id="{{ $menu['badge'] }}"
+                                    class="nav-badge bg-accent text-white ms-2 px-2 py-1 rounded-pill small"></span>
+                            @endif
+                        </a>
+                    @elseif ($hasChildren)
+                        <a class="nav-link d-flex align-items-center px-4 py-3 text-white text-decoration-none"
+                            data-bs-toggle="collapse" href="#{{ $menuKey }}Submenu" role="button"
+                            aria-expanded="{{ $isActive ? 'true' : 'false' }}"
+                            aria-controls="{{ $menuKey }}Submenu">
+                            <i class="bi bi-{{ $menu['icon'] }} me-3 fs-5"></i>
+                            <span class="nav-text">{{ $menu['title'] }}</span>
                             <i class="bi bi-chevron-down ms-auto"></i>
-                        @endif
-                    </a>
-
-                    {{-- If the module has children, render collapsible submenu --}}
-                    @if (!empty($module['menu']['children']))
-                        <div class="collapse {{ collect($module['menu']['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'show' : '' }}"
-                            id="{{ $module['slug'] }}Submenu">
+                        </a>
+                        <div class="collapse {{ $isActive ? 'show' : '' }}" id="{{ $menuKey }}Submenu">
                             <ul class="nav flex-column ms-4">
-                                @foreach ($module['menu']['children'] as $child)
-                                    <li class="nav-item">
-                                        <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none
-                                    {{ request()->routeIs($child['route']) ? 'active' : '' }}"
-                                            href="{{ oRoute($child['route']) }}">
-                                            <i class="bi bi-{{ $child['icon'] }} me-2"></i>
-                                            <span class="nav-text">{{ $child['title'] }}</span>
-                                        </a>
-                                    </li>
+                                @foreach ($menu['children'] as $child)
+                                    @if (isset($allowedModules[$menuKey][$child['key']]))
+                                        <li class="nav-item">
+                                            <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none {{ request()->routeIs($child['route']) ? 'active' : '' }}"
+                                                href="{{ oRoute($child['route']) }}">
+                                                <i class="bi bi-{{ $child['icon'] }} me-2"></i>
+                                                <span class="nav-text">{{ $child['title'] }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
                                 @endforeach
+
                             </ul>
                         </div>
                     @endif
@@ -236,37 +220,6 @@
             @endif
         @endforeach
 
-        @foreach ($menu as $main)
-            @if (in_array($main['key'], $permissions))
-                <div class="nav-item">
-                    <a class="nav-link d-flex align-items-center px-4 py-3 text-white text-decoration-none"
-                        data-bs-toggle="collapse" href="#{{ $main['key'] }}Submenu" role="button"
-                        aria-expanded="{{ collect($main['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'true' : 'false' }}"
-                        aria-controls="{{ $main['key'] }}Submenu">
-                        <i class="{{ $main['icon'] }} me-3 fs-5"></i>
-                        <span class="nav-text">{{ $main['text'] }}</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <div class="collapse {{ collect($main['children'])->pluck('route')->contains(fn($r) => request()->routeIs($r)) ? 'show' : '' }}"
-                        id="{{ $main['key'] }}Submenu">
-                        <ul class="nav flex-column ms-4">
-                            @foreach ($main['children'] as $item)
-                                @if (in_array($item['key'], $permissions))
-                                    <li class="nav-item">
-                                        <a class="nav-link d-flex align-items-center px-4 py-2 text-white text-decoration-none
-                                            {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                                            href="{{ oRoute($item['route']) }}">
-                                            <i class="{{ $item['icon'] }} me-2"></i>
-                                            <span class="nav-text">{{ $item['text'] }}</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
-        @endforeach
 
         {{-- Logout --}}
         <div class="nav-item">
@@ -279,8 +232,9 @@
                 </button>
             </form>
         </div>
-    </div>
+    </nav>
 </aside>
+
 
 <style>
     /* Floating button styles */
@@ -385,32 +339,32 @@
         });
 
         // Fetch counts
-        @if(false)
-        fetch("{{ oRoute('sidebar.counts') }}")
-            .then(res => res.json())
-            .then(data => {
-                @if (in_array('tasks', $permissions))
-                    document.getElementById("task_count").innerText = data.task_count;
-                @endif
-                @if (in_array('events', $permissions))
-                    document.getElementById("event_count").innerText = data.event_count;
-                @endif
-                @if (in_array('complaints', $permissions))
-                    document.getElementById("complaint_count").innerText = data.complaint_count;
-                @endif
-                @if (in_array('buses', $permissions))
-                    document.getElementById("bus_count").innerText = data.bus_count;
-                @endif
-                @if (in_array('hotels', $permissions))
-                    document.getElementById("hotel_count").innerText = data.hotel_count;
-                @endif
-                @if (in_array('guests', $permissions))
-                    document.getElementById("guest_count").innerText = data.guest_count;
-                @endif
-                @if (in_array('scans', $permissions))
-                    document.getElementById("scan_count").innerText = data.scan_count;
-                @endif
-            });
+        @if (false)
+            fetch("{{ oRoute('sidebar.counts') }}")
+                .then(res => res.json())
+                .then(data => {
+                    @if (in_array('tasks', $permissions))
+                        document.getElementById("task_count").innerText = data.task_count;
+                    @endif
+                    @if (in_array('events', $permissions))
+                        document.getElementById("event_count").innerText = data.event_count;
+                    @endif
+                    @if (in_array('complaints', $permissions))
+                        document.getElementById("complaint_count").innerText = data.complaint_count;
+                    @endif
+                    @if (in_array('buses', $permissions))
+                        document.getElementById("bus_count").innerText = data.bus_count;
+                    @endif
+                    @if (in_array('hotels', $permissions))
+                        document.getElementById("hotel_count").innerText = data.hotel_count;
+                    @endif
+                    @if (in_array('guests', $permissions))
+                        document.getElementById("guest_count").innerText = data.guest_count;
+                    @endif
+                    @if (in_array('scans', $permissions))
+                        document.getElementById("scan_count").innerText = data.scan_count;
+                    @endif
+                });
         @endif
     });
 </script>
